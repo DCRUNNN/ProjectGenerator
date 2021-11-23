@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[25],{glKO:function(n,t,e){"use strict";e.r(t);var s=e("KHd+"),i=Object(s.a)({data:function(){return{msg:"Hello Vue"}}},function(){var n=this.$createElement;return(this._self._c||n)("div",[this._v("\n    "+this._s(this.msg)+"\n")])},[],!1,null,null,null);t.default=i.exports}}]);
-//# sourceMappingURL=25.4cb5b115089d37761372.js.map

@@ -9,8 +9,6 @@ const getters = {
   roleName: state => state.user.roleName,
   permissionCodeList: state => state.user.permissionCodeList,
 
-  customerId: state => state.customer.customerId,
-
   permissionRouters: state => state.permission.routers,
   addRouters: state => state.permission.addRouters
 }

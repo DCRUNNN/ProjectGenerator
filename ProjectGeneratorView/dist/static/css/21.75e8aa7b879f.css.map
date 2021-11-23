@@ -1,1 +1,0 @@
-{"version":3,"sources":["21.75e8aa7b879f.css"],"names":[],"mappings":"AAAA,sCACE,WAAa,CACd,AACD,iCACE,eAAgB,AAChB,gBAAkB,CACnB","file":"21.75e8aa7b879f.css","sourcesContent":[".dashboard-container[data-v-c408d192] {\n  margin: 30px;\n}\n.dashboard-text[data-v-c408d192] {\n  font-size: 30px;\n  line-height: 46px;\n}\n\n"]}

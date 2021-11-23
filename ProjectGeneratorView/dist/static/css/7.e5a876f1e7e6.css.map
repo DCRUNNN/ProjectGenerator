@@ -1,1 +1,0 @@
-{"version":3,"sources":["7.e5a876f1e7e6.css"],"names":[],"mappings":"AACA,uCACE,gBAAiB,AACjB,iBAAmB,CACpB","file":"7.e5a876f1e7e6.css","sourcesContent":["\n.pagination-container[data-v-20ba8d5c] {\n  background: #fff;\n  padding: 20px 16px;\n}\n\n"]}

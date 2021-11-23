@@ -12,10 +12,6 @@
 </style>
 
 <script>
-  import { getAllProjects } from '@/api/project'
-  import { getProjectPhaseList , updatePhase , deletePhase } from '@/api/projectPhase'
-  import { getInvestCustomersByProjectId } from '@/api/projectCustomer';
-
   export default {
     components: {  },
     computed: {

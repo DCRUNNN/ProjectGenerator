@@ -4,7 +4,6 @@ import cn.edu.nju.dc.projectgeneratorserver.api.bean.UserDTO;
 import cn.edu.nju.dc.projectgeneratorserver.dao.po.UserPO;
 import cn.edu.nju.dc.projectgeneratorserver.service.UserService;
 import cn.edu.nju.dc.projectgeneratorserver.support.jwt.JWTUtil;
-import cn.edu.nju.dc.projectgeneratorserver.support.log.annotation.Log;
 import cn.edu.nju.dc.projectgeneratorserver.support.response.BaseResult;
 import cn.edu.nju.dc.projectgeneratorserver.support.response.BaseResultUtil;
 import java.security.Principal;
@@ -37,7 +36,6 @@ public class UserController {
     private JWTUtil jwtUtil;
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    @Log(description = "用户登录")
     public BaseResult login(@RequestBody UserDTO userDto) {
         if (StringUtils.isEmpty(userDto.getUsername()) && StringUtils.isEmpty(userDto.getEmail())) {
             return BaseResultUtil.createFailedResult("用户名或邮箱不能为空");

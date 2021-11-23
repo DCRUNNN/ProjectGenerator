@@ -58,27 +58,6 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/file',
-    component: Layout,
-    redirect: '/file/index',
-    name: '文件管理',
-    icon: 'documentation',
-    children: [
-      {
-        path: 'index',
-        name: '文件列表 ',
-        component: () => import('@/views/file/index'),
-        icon: 'list'
-      },
-      {
-        path: 'upload',
-        name: '上传文件',
-        component: () => import('@/views/file/upload2'),
-        icon: 'form'
-      }
-    ]
-  },
-  {
     path: '/log',
     component: Layout,
     redirect: '/log/businessLog',
