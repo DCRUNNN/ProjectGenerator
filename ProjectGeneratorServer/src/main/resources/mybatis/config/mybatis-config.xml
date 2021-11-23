@@ -15,5 +15,9 @@
         <typeAlias type="java.util.ArrayList" alias="ArrayList" />
         <typeAlias type="java.util.LinkedList" alias="LinkedList" />
 
+        <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.UserPO" alias="UserPO"/>
+        <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.PermissionPO" alias="PermissionPO"/>
+        <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.ResourcePO" alias="ResourcePO"/>
+        <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.OperationPO" alias="OperationPO"/>
     </typeAliases>
 </configuration>
