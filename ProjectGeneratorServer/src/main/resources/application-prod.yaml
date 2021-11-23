@@ -1,0 +1,15 @@
+server:
+  port: 45031
+  servlet:
+    context-path: /ProjectGenerator
+
+spring:
+  datasource:
+    url: jdbc:mysql://172.19.240.97:3306/cav_admin_db?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    username: ENC(97hsrIYPcKJN4Vzj1nv+hw==)
+    password: ENC(O6dNyr7zDw/I0mP94qN4jw==)
+    driver-class-name: com.mysql.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1

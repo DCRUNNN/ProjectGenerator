@@ -1,0 +1,15 @@
+server:
+  port: 45031
+  servlet:
+    context-path: /ProjectGenerator
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/cavadmin?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    username: ENC(7rTtVAZ5vgfPORElJsqvdA==)
+    password: ENC(XQ/dCyo8Fq5h8PbL/tsdEA==)
+    driver-class-name: com.mysql.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1

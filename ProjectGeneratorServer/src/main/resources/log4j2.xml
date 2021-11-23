@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT" follow="true">
+      <PatternLayout>
+        <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+      </PatternLayout>
+    </Console>
+
+    <RollingFile name="rootAppender" fileName="/var/log/ProjectGeneratorServer/root.log"
+      filePattern="/var/log/ProjectGeneratorServer/root-%i.log.zip">
+      <PatternLayout pattern="%d|%X{traceId}|%p|%C{1.}:%L|%t|%m%n"/>
+      <SizeBasedTriggeringPolicy size="300MB" />
+      <DefaultRolloverStrategy max="50"/>
+      <Filters>
+        <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+      </Filters>
+    </RollingFile>
+    <Async name="asyncRootAppender">
+      <AppenderRef ref="rootAppender" />
+    </Async>
+    <RollingFile name="errorAppender" fileName="/var/log/ProjectGeneratorServer/error.log"
+      filePattern="/var/log/ProjectGeneratorServer/error-%i.log.zip">
+      <PatternLayout pattern="%d|%X{traceId}|%p|%C{1.}:%L|%t|%m%n"/>
+      <SizeBasedTriggeringPolicy size="50MB" />
+      <DefaultRolloverStrategy max="20"/>
+      <Filters>
+        <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY" />
+      </Filters>
+    </RollingFile>
+  </Appenders>
+
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="asyncRootAppender"/>
+      <AppenderRef ref="errorAppender"/>
+    </Root>
+  </Loggers>
+
+</Configuration>
