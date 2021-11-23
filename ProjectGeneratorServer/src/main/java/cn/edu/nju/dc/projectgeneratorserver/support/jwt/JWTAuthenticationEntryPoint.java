@@ -18,17 +18,14 @@ import org.springframework.stereotype.Component;
  * Json Web Token 入口点
  */
 @Component
-public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable
-{
+public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
     /**
      * 当访问的资源没有权限时被调用
      */
     @Override
     public void commence(final HttpServletRequest request, final HttpServletResponse response,
-        final AuthenticationException authException)
-        throws IOException
-    {
+        final AuthenticationException authException) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setHeader("Content-type", MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.displayName());

@@ -14,12 +14,10 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
  * 参数校验 https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-constraint-violation-methods
  */
 @Configuration
-public class ValidatorConfig
-{
+public class ValidatorConfig {
 
     @Bean
-    public MethodValidationPostProcessor methodValidationPostProcessor()
-    {
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
         final MethodValidationPostProcessor postProcessor = new MethodValidationPostProcessor();
         // 设置 validator 模式为快速失败返回
         postProcessor.setValidator(this.validatorFailFast());
@@ -29,8 +27,7 @@ public class ValidatorConfig
     }
 
     @Bean
-    public Validator validatorFailFast()
-    {
+    public Validator validatorFailFast() {
         final ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class)
             .configure()
             .addProperty("hibernate.validator.fail_fast", "true")

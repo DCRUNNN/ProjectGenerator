@@ -26,8 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class WebSecurityConfig extends WebSecurityConfigurerAdapter
-{
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -37,21 +36,17 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter
 
     @Bean
     @Override
-    public UserDetailsService userDetailsService()
-    {
+    public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder()
-    {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Override
-    protected void configure(final AuthenticationManagerBuilder auth)
-        throws Exception
-    {
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth
             // 自定义获取用户信息
             .userDetailsService(userDetailsService())
@@ -60,9 +55,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter
     }
 
     @Override
-    protected void configure(final HttpSecurity http)
-        throws Exception
-    {
+    protected void configure(final HttpSecurity http) throws Exception {
         http.cors()
             .and()
             // 关闭csrf

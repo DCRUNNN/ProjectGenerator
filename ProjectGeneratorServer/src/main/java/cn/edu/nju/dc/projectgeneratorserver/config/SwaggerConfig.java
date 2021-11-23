@@ -16,12 +16,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig
-{
+public class SwaggerConfig {
 
     @Bean
-    public Docket createRestApi()
-    {
+    public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
             .select()
             .apis(RequestHandlerSelectors.basePackage("cn.edu.nju.dc.projectgeneratorserver.controller"))
@@ -29,8 +27,7 @@ public class SwaggerConfig
             .build();
     }
 
-    private ApiInfo apiInfo()
-    {
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder().version("1.0").build();
     }
 }

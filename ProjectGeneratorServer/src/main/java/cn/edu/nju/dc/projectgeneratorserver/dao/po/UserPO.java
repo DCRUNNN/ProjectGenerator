@@ -18,8 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserPO
-{
+public class UserPO {
 
     private Integer userId;
 
@@ -44,13 +43,11 @@ public class UserPO
     // 用户的角色对应的权限code
     private List<String> permissionCodeList;
 
-    public static UserPO valueOf(UserDTO userDto)
-    {
+    public static UserPO valueOf(UserDTO userDto) {
         return ObjectUtil.deepCloneByJson(userDto, UserPO.class);
     }
 
-    public UserDTO toDto()
-    {
+    public UserDTO toDto() {
         return ObjectUtil.deepCloneByJson(this, UserDTO.class);
     }
 }

@@ -32,8 +32,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class JWTUtil
-{
+public class JWTUtil {
 
     @Autowired
     private RSAUtil rsaUtil;
@@ -41,8 +40,7 @@ public class JWTUtil
     @Autowired
     private JWTSetting jwtSetting;
 
-    private Claims getClaims(final String token)
-    {
+    private Claims getClaims(final String token) {
         final Jws<Claims> jws = parseToken(token);
         return jws == null ? null : jws.getBody();
     }
@@ -50,8 +48,7 @@ public class JWTUtil
     /**
      * 根据token得到用户名
      */
-    public String getUsername(final String token)
-    {
+    public String getUsername(final String token) {
         final Claims claims = getClaims(token);
         return claims == null ? null : claims.getSubject();
     }
@@ -59,11 +56,9 @@ public class JWTUtil
     /**
      * 从请求头或请求参数中获取token
      */
-    public String getTokenFromRequest(final HttpServletRequest httpRequest)
-    {
+    public String getTokenFromRequest(final HttpServletRequest httpRequest) {
         String token = httpRequest.getHeader(jwtSetting.getHeader());
-        if (StringUtils.isNotEmpty(token))
-        {
+        if (StringUtils.isNotEmpty(token)) {
             return token;
         }
         return httpRequest.getParameter(jwtSetting.getHeader());
@@ -76,8 +71,7 @@ public class JWTUtil
      * @param token token
      * @return UsernamePasswordAuthenticationToken
      */
-    public UsernamePasswordAuthenticationToken getAuthentication(final String username, final String token)
-    {
+    public UsernamePasswordAuthenticationToken getAuthentication(final String username, final String token) {
         // 解析 token 的 payload
         final Claims claims = getClaims(token);
 
@@ -99,8 +93,7 @@ public class JWTUtil
      * @param grantedAuthorities 用户权限信息[ROLE_ADMIN, xx, ...]
      * @return token
      */
-    public String sign(final String username, final Collection<? extends GrantedAuthority> grantedAuthorities)
-    {
+    public String sign(final String username, final Collection<? extends GrantedAuthority> grantedAuthorities) {
         // 获取用户的权限字符串，如 user:delete, role:add
         final String authorities =
             grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
@@ -125,38 +118,31 @@ public class JWTUtil
     /**
      * 解析token
      */
-    private Jws<Claims> parseToken(final String token)
-    {
-        try
-        {
+    private Jws<Claims> parseToken(final String token) {
+        try {
             // 加载公钥
             final PublicKey publicKey = rsaUtil.loadPemPublicKey(jwtSetting.getPublicKey());
             return Jwts.parser()
                 // 公钥解密
                 .setSigningKey(publicKey).parseClaimsJws(token.replace(jwtSetting.getTokenPrefix(), ""));
         }
-        catch (final SignatureException e)
-        {
+        catch (final SignatureException e) {
             // 签名异常
             log.error("Invalid JWT signature");
         }
-        catch (final MalformedJwtException e)
-        {
+        catch (final MalformedJwtException e) {
             // JWT 格式错误
             log.error("Invalid JWT token");
         }
-        catch (final ExpiredJwtException e)
-        {
+        catch (final ExpiredJwtException e) {
             // JWT 过期
             log.error("Expired JWT token");
         }
-        catch (final UnsupportedJwtException e)
-        {
+        catch (final UnsupportedJwtException e) {
             // 不支持该 JWT
             log.error("Unsupported JWT token");
         }
-        catch (final IllegalArgumentException e)
-        {
+        catch (final IllegalArgumentException e) {
             // 参数错误异常
             log.error("JWT token compact of handler are invalid");
         }

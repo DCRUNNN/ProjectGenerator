@@ -12,8 +12,7 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface UserDao
-{
+public interface UserDao {
 
     List<UserPO> getAllUsersWithoutRole();
 

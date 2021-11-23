@@ -14,18 +14,15 @@ import lombok.extern.slf4j.Slf4j;
  * 对象转换工具类
  */
 @Slf4j
-public class ObjectUtil
-{
+public class ObjectUtil {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private ObjectUtil()
-    {
+    private ObjectUtil() {
 
     }
 
-    static
-    {
+    static {
         // 对象中没有属性时不抛出异常
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
@@ -36,16 +33,13 @@ public class ObjectUtil
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
     }
 
-    public static <S, T> T deepCloneByJson(S source, Class<T> targetType)
-    {
+    public static <S, T> T deepCloneByJson(S source, Class<T> targetType) {
         Preconditions.checkNotNull(source, "source object must be not null");
         Preconditions.checkNotNull(targetType, "target type must be not null");
-        try
-        {
+        try {
             return objectMapper.readValue(objectMapper.writeValueAsString(source), targetType);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             log.error("error occurs when deep cloning object");
         }
         return null;

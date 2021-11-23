@@ -12,8 +12,7 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface PermissionDao
-{
+public interface PermissionDao {
 
     /**
      * 找到所有权限可控资源

@@ -16,16 +16,13 @@ import org.springframework.stereotype.Service;
  * @date 2019/12/17 23:13
  */
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService
-{
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String username)
-        throws UsernameNotFoundException
-    {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         final UserPO userPO = userService.getUserByUsername(username);
         // 权限

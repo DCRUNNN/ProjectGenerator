@@ -23,8 +23,7 @@ import org.springframework.stereotype.Component;
  * @date 2019/12/17 23:05
  */
 @Component
-public class RSAUtil
-{
+public class RSAUtil {
 
     private final static Logger log = LoggerFactory.getLogger(RSAUtil.class);
 
@@ -38,8 +37,7 @@ public class RSAUtil
 
     private static final String privateKeyTail = "-----END PRIVATE KEY-----";
 
-    private RSAUtil()
-    {
+    private RSAUtil() {
 
     }
 
@@ -50,9 +48,7 @@ public class RSAUtil
      * @return 密钥对 公钥 keyPair.getPublic() 私钥 keyPair.getPrivate()
      * @throws Exception e
      */
-    public KeyPair genKeyPair(final int keyLength)
-        throws Exception
-    {
+    public KeyPair genKeyPair(final int keyLength) throws Exception {
         final KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(this.algorithm);
         keyPairGenerator.initialize(keyLength);
         return keyPairGenerator.generateKeyPair();
@@ -66,9 +62,7 @@ public class RSAUtil
      * @return 加密内容
      * @throws Exception e
      */
-    public byte[] encrypt(final byte[] content, final PublicKey publicKey)
-        throws Exception
-    {
+    public byte[] encrypt(final byte[] content, final PublicKey publicKey) throws Exception {
         final Cipher cipher = Cipher.getInstance(this.algorithm);
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         return cipher.doFinal(content);
@@ -82,17 +76,14 @@ public class RSAUtil
      * @return 解密内容
      * @throws Exception e
      */
-    public byte[] decrypt(final byte[] content, final PrivateKey privateKey)
-        throws Exception
-    {
+    public byte[] decrypt(final byte[] content, final PrivateKey privateKey) throws Exception {
         final Cipher cipher = Cipher.getInstance(this.algorithm);
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         return cipher.doFinal(content);
     }
 
     private byte[] replaceAndBase64Decode(final String file, final String headReplace, final String tailReplace)
-        throws Exception
-    {
+        throws Exception {
         final ResourceLoader loader = new DefaultResourceLoader();
         final File f = loader.getResource(file).getFile();
         final FileInputStream fis = new FileInputStream(f);
@@ -112,17 +103,14 @@ public class RSAUtil
      * @param pem 公钥文件名
      * @return 公钥
      */
-    public PublicKey loadPemPublicKey(final String pem)
-    {
-        try
-        {
+    public PublicKey loadPemPublicKey(final String pem) {
+        try {
             final byte[] decoded = this.replaceAndBase64Decode(pem, publicKeyHead, publicKeyTail);
             final X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
             final KeyFactory keyFactory = KeyFactory.getInstance(this.algorithm);
             return keyFactory.generatePublic(spec);
         }
-        catch (final Exception e)
-        {
+        catch (final Exception e) {
             log.error(e.getMessage());
             return null;
         }
@@ -134,17 +122,14 @@ public class RSAUtil
      * @param pem 私钥文件名
      * @return 私钥
      */
-    public PrivateKey loadPemPrivateKey(final String pem)
-    {
-        try
-        {
+    public PrivateKey loadPemPrivateKey(final String pem) {
+        try {
             final byte[] decoded = this.replaceAndBase64Decode(pem, privateKeyHead, privateKeyTail);
             final PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decoded);
             final KeyFactory keyFactory = KeyFactory.getInstance(this.algorithm);
             return keyFactory.generatePrivate(spec);
         }
-        catch (final Exception e)
-        {
+        catch (final Exception e) {
             log.error(e.getMessage());
             return null;
         }

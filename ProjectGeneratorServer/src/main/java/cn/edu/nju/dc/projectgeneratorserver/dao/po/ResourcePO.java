@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResourcePO
-{
+public class ResourcePO {
 
     private String resource;
 

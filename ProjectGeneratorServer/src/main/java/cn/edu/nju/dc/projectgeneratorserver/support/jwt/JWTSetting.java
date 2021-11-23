@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "jwt")
 @Data
-public class JWTSetting
-{
+public class JWTSetting {
 
     private String authoritiesKey;
 

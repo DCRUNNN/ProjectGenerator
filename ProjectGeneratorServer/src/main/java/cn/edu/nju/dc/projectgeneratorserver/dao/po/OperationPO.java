@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OperationPO
-{
+public class OperationPO {
     private int operationId;
 
     private String operation;

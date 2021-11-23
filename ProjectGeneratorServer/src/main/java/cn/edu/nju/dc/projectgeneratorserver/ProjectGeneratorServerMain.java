@@ -10,11 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @EnableEncryptableProperties
 @SpringBootApplication
-public class ProjectGeneratorServerMain
-{
+public class ProjectGeneratorServerMain {
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         SpringApplication.run(ProjectGeneratorServerMain.class, args);
     }
 }

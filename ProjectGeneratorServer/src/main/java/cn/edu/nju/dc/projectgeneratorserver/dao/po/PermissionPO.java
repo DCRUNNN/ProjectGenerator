@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PermissionPO
-{
+public class PermissionPO {
 
     private int permissionId;
 

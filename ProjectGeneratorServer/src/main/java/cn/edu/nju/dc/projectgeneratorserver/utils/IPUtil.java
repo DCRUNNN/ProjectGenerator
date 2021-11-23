@@ -12,8 +12,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  */
 @Slf4j
-public class IPUtil
-{
+public class IPUtil {
 
     private final static String UNKNOWN = "unknown";
 
@@ -21,8 +20,7 @@ public class IPUtil
 
     private final static String LOCALHOST_IPV6 = "0:0:0:0:0:0:0:1";
 
-    private IPUtil()
-    {
+    private IPUtil() {
 
     }
 
@@ -32,27 +30,21 @@ public class IPUtil
      * @param request request
      * @return IP地址
      */
-    public static String getIpAddress(final HttpServletRequest request)
-    {
+    public static String getIpAddress(final HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
-        if (StringUtils.isEmpty(ip) || StringUtils.equalsIgnoreCase(UNKNOWN, ip))
-        {
+        if (StringUtils.isEmpty(ip) || StringUtils.equalsIgnoreCase(UNKNOWN, ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (StringUtils.isEmpty(ip) || StringUtils.equalsIgnoreCase(UNKNOWN, ip))
-        {
+        if (StringUtils.isEmpty(ip) || StringUtils.equalsIgnoreCase(UNKNOWN, ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (StringUtils.isEmpty(ip) || StringUtils.equalsIgnoreCase(UNKNOWN, ip))
-        {
+        if (StringUtils.isEmpty(ip) || StringUtils.equalsIgnoreCase(UNKNOWN, ip)) {
             ip = request.getRemoteAddr();
         }
-        if (StringUtils.equals(LOCALHOST_IPV6, ip))
-        {
+        if (StringUtils.equals(LOCALHOST_IPV6, ip)) {
             ip = LOCALHOST_IPV4;
         }
-        if (ip.split(",").length > 1)
-        {
+        if (ip.split(",").length > 1) {
             ip = ip.split(",")[0];
         }
         return ip;

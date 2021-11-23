@@ -10,12 +10,10 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Controller
 @ApiIgnore
-public class SwaggerController
-{
+public class SwaggerController {
 
     @RequestMapping("/api")
-    public String redirect()
-    {
+    public String redirect() {
         return "redirect:swagger-ui.html";
     }
 }

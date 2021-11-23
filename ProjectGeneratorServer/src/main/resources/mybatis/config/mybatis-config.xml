@@ -19,5 +19,6 @@
         <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.PermissionPO" alias="PermissionPO"/>
         <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.ResourcePO" alias="ResourcePO"/>
         <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.OperationPO" alias="OperationPO"/>
+        <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.support.log.domain.LogEntity" alias="LogEntity"/>
     </typeAliases>
 </configuration>

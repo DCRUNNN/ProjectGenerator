@@ -19,14 +19,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Spring MVC 配置
  */
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer
-{
+public class WebMvcConfig implements WebMvcConfigurer {
 
     private final long MAX_AGE_SECS = 3600;
 
     @Override
-    public void addCorsMappings(CorsRegistry registry)
-    {
+    public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
             .allowedOrigins("*")
             .allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE")
@@ -37,12 +35,10 @@ public class WebMvcConfig implements WebMvcConfigurer
      * 阿里 FastJson 作JSON MessageConverter
      */
     @Override
-    public void configureMessageConverters(final List<HttpMessageConverter<?>> converters)
-    {
+    public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
         final FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
         final FastJsonConfig config = new FastJsonConfig();
-        converter.setSupportedMediaTypes(new ArrayList<MediaType>()
-        {{
+        converter.setSupportedMediaTypes(new ArrayList<MediaType>() {{
             add(MediaType.APPLICATION_JSON_UTF8);
             add(MediaType.APPLICATION_FORM_URLENCODED);
             add(MediaType.TEXT_HTML);

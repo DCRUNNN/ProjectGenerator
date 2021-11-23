@@ -7,8 +7,7 @@ import cn.edu.nju.dc.projectgeneratorserver.support.response.BaseResult;
  * @author dc
  * @date 2019/1/8 21:14
  */
-public interface UserMgr
-{
+public interface UserMgr {
 
     BaseResult login(UserDTO userDto);
 

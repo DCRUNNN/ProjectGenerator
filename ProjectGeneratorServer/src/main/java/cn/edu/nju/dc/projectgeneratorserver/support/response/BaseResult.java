@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseResult implements Serializable
-{
+public class BaseResult implements Serializable {
 
     private static final long serialVersionUID = 1108845534729207971L;
 
@@ -25,15 +24,13 @@ public class BaseResult implements Serializable
 
     private Object data;
 
-    private BaseResult(final Builder builder)
-    {
+    private BaseResult(final Builder builder) {
         this.returnCode = builder.returnCode;
         this.message = builder.message;
         this.data = builder.data;
     }
 
-    public static class Builder
-    {
+    public static class Builder {
 
         private Integer returnCode;
 
@@ -41,25 +38,21 @@ public class BaseResult implements Serializable
 
         private Object data;
 
-        public Builder(final Integer returnCode)
-        {
+        public Builder(final Integer returnCode) {
             this.returnCode = returnCode;
         }
 
-        public Builder message(final String message)
-        {
+        public Builder message(final String message) {
             this.message = message;
             return this;
         }
 
-        public Builder data(final Object data)
-        {
+        public Builder data(final Object data) {
             this.data = data;
             return this;
         }
 
-        public BaseResult build()
-        {
+        public BaseResult build() {
             return new BaseResult(this);
         }
     }

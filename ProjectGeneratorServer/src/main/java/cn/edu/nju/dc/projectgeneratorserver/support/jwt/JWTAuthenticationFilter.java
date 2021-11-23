@@ -24,8 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 @Component
 @Slf4j
-public class JWTAuthenticationFilter extends OncePerRequestFilter
-{
+public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Resource
     private JWTUtil jwtUtil;
@@ -33,29 +32,23 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter
     @Override
     protected void doFilterInternal(@Nonnull final HttpServletRequest request,
         @Nonnull final HttpServletResponse response, @Nonnull final FilterChain filterChain)
-        throws ServletException, IOException
-    {
+        throws ServletException, IOException {
         // 预请求后，直接返回
         // 返回码必须为 200 否则视为请求失败
-        if (StringUtils.equals("OPTIONS", request.getMethod()))
-        {
+        if (StringUtils.equals("OPTIONS", request.getMethod())) {
             return;
         }
 
         final String token = jwtUtil.getTokenFromRequest(request);
-        if (StringUtils.isEmpty(token))
-        {
+        if (StringUtils.isEmpty(token)) {
             log.info("=> Anonymous<{}> request URL<{}> Method<{}>",
                 IPUtil.getIpAddress(request),
                 request.getRequestURL(),
                 request.getMethod());
-        }
-        else
-        {
+        } else {
             final String username = this.jwtUtil.getUsername(token);
 
-            if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null)
-            {
+            if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 final UsernamePasswordAuthenticationToken authentication = jwtUtil.getAuthentication(username, token);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
