@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.nju.dc.projectgeneratorserver.dao.TemplateDao">
+
+  <sql id="all_columns">
+    id, name, description, author, content_id, content, create_time, update_time
+  </sql>
+
+  <resultMap id="BaseResultMap" type="TemplatePO">
+    <result column="id" property="id" jdbcType="INTEGER"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="description" property="description" jdbcType="VARCHAR"/>
+    <result column="author" property="author" jdbcType="VARCHAR"/>
+    <result column="content_id" property="contentID" jdbcType="VARCHAR"/>
+    <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <insert id="insertTemplate" parameterType="TemplatePO" useGeneratedKeys="true" keyProperty="template.id">
+    INSERT INTO t_template (<include refid="all_columns"/>)
+    VALUES
+    (
+    #{template.id}, #{template.name}, #{template.description}, #{template.author}, #{template.contentID},
+    #{template.content}, #{template.createTime}, #{template.updateTime}
+    )
+  </insert>
+
+  <select id="getByID" resultMap="BaseResultMap">
+    SELECT
+    <include refid="all_columns"/>
+    FROM t_template
+    WHERE id = #{templateID}
+  </select>
+
+  <select id="listAll" resultMap="BaseResultMap">
+    SELECT
+    <include refid="all_columns"/>
+    FROM t_template
+  </select>
+
+</mapper>
