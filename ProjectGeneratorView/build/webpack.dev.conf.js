@@ -9,6 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const { VueLoaderPlugin } = require('vue-loader')
 
@@ -68,7 +69,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new MonacoWebpackPlugin({
+      languages: ['java','go','javascript','python','json',"html","javascript","typescript","css"]
+    })
   ]
 })
 
