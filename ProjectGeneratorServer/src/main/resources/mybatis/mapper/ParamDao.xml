@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.nju.dc.projectgeneratorserver.dao.ParamDao">
+
+  <sql id="all_columns">
+    id, template_id, `name`, description, `type`, create_time, update_time
+  </sql>
+
+  <sql id="param_all_columns">
+    id, `name`, description, `type`, create_time, update_time
+  </sql>
+
+  <sql id="template_param_all_columns">
+    template_id, param_id
+  </sql>
+
+  <resultMap id="TemplateParamMap" type="ParamPO">
+    <result column="id" property="id" jdbcType="INTEGER"/>
+    <result column="template_id" property="templateID" jdbcType="INTEGER"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="description" property="description" jdbcType="VARCHAR"/>
+    <result column="type" property="type" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <resultMap id="PublicParamMap" type="ParamPO">
+    <result column="id" property="id" jdbcType="INTEGER"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="description" property="description" jdbcType="VARCHAR"/>
+    <result column="type" property="type" jdbcType="INTEGER"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <insert id="insertParam" parameterType="ParamPO" useGeneratedKeys="true" keyProperty="param.id">
+    INSERT INTO t_param (<include refid="param_all_columns"/>)
+    VALUES
+    (
+    #{param.id}, #{param.name}, #{param.description}, #{param.type},
+    #{param.createTime}, #{param.updateTime}
+    )
+  </insert>
+
+  <insert id="insertTemplateParamRelation" parameterType="TemplateParamRelationPO">
+    INSERT INTO t_template_param (<include refid="template_param_all_columns"/>)
+    VALUES
+    (
+    #{relation.templateID}, #{relation.paramID}
+    )
+  </insert>
+
+
+  <select id="listByTemplateID" resultMap="TemplateParamMap">
+    SELECT
+    <include refid="all_columns"/>
+    FROM t_param param, t_template_param relation
+    WHERE relation.template_id = #{templateID}
+    AND param.id = relation.param_id
+  </select>
+
+  <select id="listAllPublicParam" resultMap="PublicParamMap">
+    SELECT
+    <include refid="param_all_columns"/>
+    FROM t_param
+    WHERE `type` = 1
+  </select>
+
+</mapper>

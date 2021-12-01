@@ -29,7 +29,7 @@ public class TemplateController {
     @RequestMapping(path = "/insert", method = RequestMethod.POST)
     @Log(description = "新增模板")
     public BaseResult insertTemplate(@RequestBody TemplateDTO templateDTO) {
-        return BaseResultUtil.createOkResult(templateService.InsertTemplate(TemplatePO.valueOf(templateDTO)));
+        return BaseResultUtil.createOkResult(templateService.insertTemplate(TemplatePO.valueOf(templateDTO)));
     }
 
     @PreAuthorize("hasAuthority('template:list')")

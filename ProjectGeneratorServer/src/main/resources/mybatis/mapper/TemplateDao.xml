@@ -4,8 +4,12 @@
 
 <mapper namespace="cn.edu.nju.dc.projectgeneratorserver.dao.TemplateDao">
 
-  <sql id="all_columns">
-    id, name, description, author, content_id, content, create_time, update_time
+  <sql id="template_columns">
+    id, `name`, description, author, content_id, create_time, update_time
+  </sql>
+
+  <sql id="content_columns">
+    content_id, content
   </sql>
 
   <resultMap id="BaseResultMap" type="TemplatePO">
@@ -13,32 +17,42 @@
     <result column="name" property="name" jdbcType="VARCHAR"/>
     <result column="description" property="description" jdbcType="VARCHAR"/>
     <result column="author" property="author" jdbcType="VARCHAR"/>
-    <result column="content_id" property="contentID" jdbcType="VARCHAR"/>
+    <result column="content_id" property="contentID" jdbcType="INTEGER"/>
     <result column="content" property="content" jdbcType="LONGVARCHAR"/>
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
   </resultMap>
 
   <insert id="insertTemplate" parameterType="TemplatePO" useGeneratedKeys="true" keyProperty="template.id">
-    INSERT INTO t_template (<include refid="all_columns"/>)
+    INSERT INTO t_template (<include refid="template_columns"/>)
     VALUES
     (
     #{template.id}, #{template.name}, #{template.description}, #{template.author}, #{template.contentID},
-    #{template.content}, #{template.createTime}, #{template.updateTime}
+    #{template.createTime}, #{template.updateTime}
+    )
+  </insert>
+
+  <insert id="insertTemplateContent" parameterType="TemplateContentPO" useGeneratedKeys="true" keyProperty="content.contentID">
+    INSERT INTO t_template_content (<include refid="content_columns"/>)
+    VALUES
+    (
+    #{content.contentID}, #{content.content}
     )
   </insert>
 
   <select id="getByID" resultMap="BaseResultMap">
     SELECT
-    <include refid="all_columns"/>
-    FROM t_template
-    WHERE id = #{templateID}
+    t.*, c.content
+    FROM t_template t, t_template_content c
+    WHERE t.id = #{templateID}
+    AND t.content_id = c.content_id
   </select>
 
   <select id="listAll" resultMap="BaseResultMap">
     SELECT
-    <include refid="all_columns"/>
-    FROM t_template
+    t.*, c.content
+    FROM t_template t, t_template_content c
+    WHERE t.content_id = c.content_id
   </select>
 
 </mapper>

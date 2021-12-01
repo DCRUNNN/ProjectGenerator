@@ -11,7 +11,7 @@ import com.github.pagehelper.PageInfo;
  */
 public interface TemplateService {
 
-    int InsertTemplate(TemplatePO templatePO) throws DBException;
+    int insertTemplate(TemplatePO templatePO) throws DBException;
 
     TemplateDTO getById(int templateID);
 

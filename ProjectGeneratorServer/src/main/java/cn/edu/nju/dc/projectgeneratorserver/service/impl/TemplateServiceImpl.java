@@ -2,6 +2,7 @@ package cn.edu.nju.dc.projectgeneratorserver.service.impl;
 
 import cn.edu.nju.dc.projectgeneratorserver.api.bean.TemplateDTO;
 import cn.edu.nju.dc.projectgeneratorserver.dao.TemplateDao;
+import cn.edu.nju.dc.projectgeneratorserver.dao.po.TemplateContentPO;
 import cn.edu.nju.dc.projectgeneratorserver.dao.po.TemplatePO;
 import cn.edu.nju.dc.projectgeneratorserver.service.TemplateService;
 import cn.edu.nju.dc.projectgeneratorserver.support.exception.DBException;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author dc
@@ -24,13 +26,20 @@ public class TemplateServiceImpl implements TemplateService {
     private TemplateDao templateDao;
 
     @Override
-    public int InsertTemplate(TemplatePO templatePO) throws DBException {
+    @Transactional(rollbackFor = Exception.class)
+    public int insertTemplate(TemplatePO templatePO) throws DBException {
         try {
+            // 保存模板内容
+            TemplateContentPO contentPO = new TemplateContentPO();
+            contentPO.setContent(templatePO.getContent());
+            templateDao.insertTemplateContent(contentPO);
+            // 保存模板信息
+            templatePO.setContentID(contentPO.getContentID());
             templateDao.insertTemplate(templatePO);
             return templatePO.getId();
         }
         catch (DuplicateKeyException e) {
-            throw new DBException("template id already exist", e);
+            throw new DBException("template name already exist", e);
         }
         catch (Throwable e) {
             throw new ServiceException(String.format("fail to insert template, name is [%s]", templatePO.getName()), e);

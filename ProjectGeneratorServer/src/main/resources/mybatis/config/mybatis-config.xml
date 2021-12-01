@@ -20,6 +20,9 @@
         <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.ResourcePO" alias="ResourcePO"/>
         <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.OperationPO" alias="OperationPO"/>
         <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.TemplatePO" alias="TemplatePO"/>
+        <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.TemplateContentPO" alias="TemplateContentPO"/>
+        <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.ParamPO" alias="ParamPO"/>
+        <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.dao.po.TemplateParamRelationPO" alias="TemplateParamRelationPO"/>
         <typeAlias type="cn.edu.nju.dc.projectgeneratorserver.support.log.domain.LogEntity" alias="LogEntity"/>
     </typeAliases>
 </configuration>
