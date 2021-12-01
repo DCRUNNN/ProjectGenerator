@@ -69,6 +69,7 @@
                   ref="monacoEditor"
                   :language="currentFile.language"
                   :codes="currentFile.content"
+                  :readOnly="currentFile.fileType!==2"
                   @onMounted="onMounted"
                   @onCodeChange="onCodeChange"/>
               </el-card>
@@ -255,19 +256,21 @@
       // editor内容改变自动获取值
       onCodeChange(val, event) {
         if (!event.isFlush) {
-          this.currentContentHasChanged = true
+          if (this.currentFile.fileType === 2) {
+            this.currentContentHasChanged = true
+          }
         }
       },
       handleNodeClick(clickedFile, nodeObject, vueComponent) {
-        if (this.currentFile === nodeObject) {
-          return
-        }
-        if (this.currentFile.fileType !== 2) {
-          this.currentFile = clickedFile;
+        if (this.currentFile === clickedFile) {
           return
         }
         if (!this.currentContentHasChanged) {
           this.currentFile = clickedFile
+          return
+        }
+        if (this.currentFile.fileType !== 2) {
+          this.currentFile = clickedFile;
           return
         }
         this.$confirm('您是否需要保存 [' + this.currentFile.name + '] 的内容?', 'Warning', {
@@ -279,6 +282,7 @@
           this.currentFile = clickedFile
         }).catch(() => {
           this.currentFile = clickedFile
+          this.currentContentHasChanged = false
         })
       },
       createFile(formName) {

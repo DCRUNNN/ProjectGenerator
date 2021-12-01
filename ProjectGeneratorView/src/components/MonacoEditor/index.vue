@@ -54,13 +54,19 @@
           return 'plaintext'
         }
       },
+      readOnly: {
+        type: Boolean,
+        default: function () {
+          return true
+        }
+      },
       editorOptions: {
         type: Object,
         default: function () {
           return {
             selectOnLineNumbers: true,
             roundedSelection: false,
-            readOnly: false,        // 只读
+            readOnly: true,         // 只读
             cursorStyle: 'line',        //光标样式
             automaticLayout: false, //自动布局
             glyphMargin: true,  //字形边缘
@@ -122,6 +128,9 @@
       },
       language(newValue, oldValue) {
         this.initEditor()
+      },
+      readOnly(newValue, oldValue) {
+        this.initEditor()
       }
     },
     mounted() {
@@ -138,7 +147,16 @@
           value: self.codesCopy || self.codes,
           language: self.language,
           theme: self.theme,//vs, hc-black, or vs-dark
-          editorOptions: self.editorOptions,
+          readOnly: this.readOnly, // 只读
+          selectOnLineNumbers: true,
+          roundedSelection: false,
+          cursorStyle: 'line',        //光标样式
+          automaticLayout: false, //自动布局
+          glyphMargin: true,  //字形边缘
+          useTabStops: false,
+          fontSize: 20,       //字体大小
+          autoIndent: true,//自动布局
+          //editorOptions: self.editorOptions,
         });
         self.$emit('onMounted', self.monacoEditorInstance);//编辑器创建完成回调
         self.monacoEditorInstance.onDidChangeModelContent(function (event) {//编辑器内容changge事件
