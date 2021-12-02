@@ -1,5 +1,6 @@
 package cn.edu.nju.dc.projectgeneratorserver.api.bean;
 
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -20,6 +21,8 @@ public class TemplateDTO {
     private int contentID;
 
     private String content;
+
+    private List<ParamDTO> paramList;
 
     private String createTime;
 

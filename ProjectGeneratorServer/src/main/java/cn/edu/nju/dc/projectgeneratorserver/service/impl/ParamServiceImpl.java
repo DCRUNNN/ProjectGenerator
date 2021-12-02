@@ -5,6 +5,8 @@ import cn.edu.nju.dc.projectgeneratorserver.dao.po.ParamPO;
 import cn.edu.nju.dc.projectgeneratorserver.dao.po.TemplateParamRelationPO;
 import cn.edu.nju.dc.projectgeneratorserver.service.ParamService;
 import cn.edu.nju.dc.projectgeneratorserver.support.exception.ServiceException;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,7 @@ public class ParamServiceImpl implements ParamService {
     }
 
     @Override
-    public List<ParamPO> listAllPublicParams() {
-        return paramDao.listAllPublicParam();
+    public PageInfo<ParamPO> listAllPublicParams(int page, int size) {
+        return PageHelper.startPage(page, size).doSelectPageInfo(() -> paramDao.listAllPublicParam());
     }
 }

@@ -23,7 +23,7 @@
           </el-row>
         </el-form-item>
       </el-form>
-      <el-table :data="templateList.filter(data => !searchText
+      <el-table :data="paramList.filter(data => !searchText
                     || data.name.toLowerCase().includes(searchText.toLowerCase()))"
                 v-loading.body="listLoading"
                 element-loading-text="全力加载中..."
@@ -61,11 +61,11 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button-group>
-              <router-link :to="'/template/edit/'+scope.row.id">
-                <el-button type="primary" size="mini" icon="el-icon-document">修改</el-button>
-              </router-link>
+              <el-button type="primary" size="mini" icon="el-icon-document"
+                         @click.native.prevent="updateParam(scope.id)">修改
+              </el-button>
               <el-button type="danger" size="mini" icon="el-icon-delete"
-                         @click.native.prevent="deleteTemplate(scope.row.id)">删除
+                         @click.native.prevent="deleteParam(scope.id)">删除
               </el-button>
             </el-button-group>
           </template>
@@ -92,15 +92,15 @@
 </style>
 
 <script>
-  import { listAllTemplate } from '@/api/template'
+  import { listAllPublicParams, insertPublicParam } from '@/api/param'
 
   export default {
-    name: 'TemplateManage',
+    name: 'ParamManage',
     components: { },
     data() {
       return {
         searchText: '',
-        templateList: [],
+        paramList: [],
         listLoading: false,
         total: 0,
         page: 1,
@@ -111,14 +111,14 @@
 
     },
     created() {
-      this.listAllTemplate();
+      this.listAllPublicParams();
     },
     methods: {
-      listAllTemplate(){
+      listAllPublicParams(){
         this.listLoading = true;
-        listAllTemplate(this.page, this.size).then(response =>{
+        listAllPublicParams(this.page, this.size).then(response =>{
           if (response.returnCode === 200) {
-            this.templateList = response.data.list;
+            this.paramList = response.data.list;
             this.total = response.data.total;
             this.listLoading = false;
           }else{
@@ -130,18 +130,20 @@
           console.error(error);
         })
       },
-      deleteTemplate(templateID) {
-        console.log(templateID)
+      updateParam(paramID) {
+        this.$message.warning("马上支持")
+      },
+      deleteParam(paramID) {
         this.$message.warning("马上支持")
       },
       handleSizeChange(size) {
         this.size = size;
         this.page = 1;
-        this.listAllTemplate()
+        this.listAllPublicParams()
       },
       handleCurrentChange(page) {
         this.page = page;
-        this.listAllTemplate()
+        this.listAllPublicParams()
       },
     }
   }

@@ -42,8 +42,9 @@ public class ParamController {
     }
 
     @RequestMapping(path = "/listAllPublicParams", method = RequestMethod.GET)
-    public BaseResult listAllPublicParams() {
-        return BaseResultUtil.createOkResult(paramService.listAllPublicParams());
+    public BaseResult listAllPublicParams(@RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "0") Integer size) {
+        return BaseResultUtil.createOkResult(paramService.listAllPublicParams(page, size));
     }
 
 }

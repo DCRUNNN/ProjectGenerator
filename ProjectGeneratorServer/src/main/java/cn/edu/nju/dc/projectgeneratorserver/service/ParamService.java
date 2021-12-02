@@ -1,6 +1,7 @@
 package cn.edu.nju.dc.projectgeneratorserver.service;
 
 import cn.edu.nju.dc.projectgeneratorserver.dao.po.ParamPO;
+import com.github.pagehelper.PageInfo;
 import java.util.List;
 
 /**
@@ -15,5 +16,5 @@ public interface ParamService {
 
     List<ParamPO> listByTemplateID(int templateID);
 
-    List<ParamPO> listAllPublicParams();
+    PageInfo<ParamPO> listAllPublicParams(int page, int size);
 }

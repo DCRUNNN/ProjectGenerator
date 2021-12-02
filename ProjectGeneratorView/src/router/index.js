@@ -45,15 +45,46 @@ export const asyncRouterMap = [
   {
     path: '/template',
     component: Layout,
+    name: '模板管理',
     redirect: '/template/index',
+    icon: 'documentation',
+    children: [
+      {
+        path: 'create',
+        name: '新建模板',
+        component: () => import('@/views/template/create'),
+        meta: { permission: ['template:list'] },
+        icon: 'form',
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        name: '编辑模板',
+        component: () => import('@/views/template/edit'),
+        meta: { permission: ['template:list'] },
+        icon: 'form',
+        hidden: true
+      },
+      {
+        path: 'index',
+        name: '模板列表',
+        component: () => import('@/views/template/index'),
+        meta: { permission: ['template:list'] },
+        icon: 'form',
+      },
+    ]
+  },
+  {
+    path: '/param',
+    component: Layout,
+    redirect: '/param/index',
     icon: 'documentation',
     noDropDown: true,
     children: [
       {
         path: 'index',
-        name: '模板管理',
-        component: () => import('@/views/template/index'),
-        meta: { permission: ['template:list'] }
+        name: '参数管理',
+        component: () => import('@/views/param/index'),
+        //meta: { permission: ['params:list'] }
       },
     ]
   },

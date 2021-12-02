@@ -1,7 +1,9 @@
 package cn.edu.nju.dc.projectgeneratorserver.dao.po;
 
+import cn.edu.nju.dc.projectgeneratorserver.api.bean.ParamDTO;
 import cn.edu.nju.dc.projectgeneratorserver.api.bean.TemplateDTO;
 import cn.edu.nju.dc.projectgeneratorserver.utils.ObjectUtil;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -23,6 +25,8 @@ public class TemplatePO {
     private int contentID;
 
     private String content;
+
+    private List<ParamPO> paramList;
 
     private String createTime;
 
