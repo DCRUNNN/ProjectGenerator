@@ -28,3 +28,11 @@ export function insertTemplate(templateDTO) {
     data: templateDTO
   })
 }
+
+export function updateTemplate(templateDTO) {
+  return request({
+    url: '/template/update',
+    method: 'post',
+    data: templateDTO
+  })
+}

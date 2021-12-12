@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+import vueNcform from '@ncform/ncform';
+import ncformStdComps from '@ncform/ncform-theme-elementui';
+
 import '@/styles/element-variables.scss'
 import App from './App'
 import router from './router'
@@ -16,9 +19,9 @@ import locale from 'element-ui/lib/locale'
 // 设置语言
 locale.use(lang)
 
-Vue.use(ElementUI, {
-  size: 'medium'
-})
+Vue.use(ElementUI, {size: 'medium'})
+
+Vue.use(vueNcform, { extComponents: ncformStdComps });
 
 // 全局的常量
 Vue.prototype.request = request

@@ -32,6 +32,13 @@ public class TemplateController {
         return BaseResultUtil.createOkResult(templateService.insertTemplate(TemplatePO.valueOf(templateDTO)));
     }
 
+    @PreAuthorize("hasAuthority('template:update')")
+    @RequestMapping(path = "/update", method = RequestMethod.POST)
+    @Log(description = "更新模板")
+    public BaseResult updateTemplate(@RequestBody TemplateDTO templateDTO) {
+        return BaseResultUtil.createOkResult(templateService.updateTemplate(TemplatePO.valueOf(templateDTO)));
+    }
+
     @PreAuthorize("hasAuthority('template:list')")
     @RequestMapping(path = "/getByTemplateID", method = RequestMethod.GET)
     public BaseResult getByTemplateID(@RequestParam int templateID) {

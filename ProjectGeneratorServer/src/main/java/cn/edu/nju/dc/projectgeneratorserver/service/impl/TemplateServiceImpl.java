@@ -68,6 +68,36 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateTemplate(TemplatePO templatePO) throws DBException {
+        try{
+            // 设置更新时间
+            templatePO.setUpdateTime(DateUtil.getCurrentFormatTime());
+            // 更新模板内容
+            TemplateContentPO contentPO = new TemplateContentPO();
+            contentPO.setContent(templatePO.getContent());
+            contentPO.setContentID(templatePO.getContentID());
+            templateDao.updateTemplateContent(contentPO);
+            // 更新模板信息
+            templateDao.updateTemplate(templatePO);
+            // 更新模板对应的参数，先删后插
+            paramDao.deleteByTemplateID(templatePO.getId());
+            if (CollectionUtils.isNotEmpty(templatePO.getParamList())) {
+                templatePO.getParamList()
+                    .stream()
+                    .map(paramPO -> new TemplateParamRelationPO(templatePO.getId(), paramPO.getId()))
+                    .forEach(relation -> paramDao.insertTemplateParamRelation(relation));
+            }
+            return templatePO.getId();
+        }catch (DuplicateKeyException e) {
+            throw new DBException("template name already exist", e);
+        }
+        catch (Throwable e) {
+            throw new ServiceException(String.format("fail to update template, name is [%s]", templatePO.getName()), e);
+        }
+    }
+
+    @Override
     public TemplateDTO getById(int templateID) {
         List<ParamDTO> paramDTOList =
             paramDao.listByTemplateID(templateID).stream().map(ParamPO::toDTO).collect(Collectors.toList());

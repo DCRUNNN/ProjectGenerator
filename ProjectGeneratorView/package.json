@@ -19,6 +19,9 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@ncform/ncform": "^1.7.9",
+    "@ncform/ncform-common": "^1.7.9",
+    "@ncform/ncform-theme-elementui": "^1.7.9",
     "autoprefixer": "^7.1.2",
     "axios": "^0.18.0",
     "babel-core": "^6.22.1",

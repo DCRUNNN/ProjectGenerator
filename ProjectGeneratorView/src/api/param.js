@@ -18,3 +18,11 @@ export function insertPublicParam(paramForm) {
     data: paramForm
   })
 }
+
+export function updatePublicParam(paramForm) {
+  return request({
+    url: '/param/updatePublicParam',
+    method: 'post',
+    data: paramForm
+  })
+}

@@ -83,7 +83,7 @@ public class ExceptionResolver {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public BaseResult globalException(final HttpServletRequest request, final Throwable e) {
-        log.error("全局异常 => {}", e.getMessage());
+        log.error("全局异常 => {}", e);
         return BaseResultUtil.createInternalServerErrorResult(String.format("%s => %s",
             request.getRequestURI(),
             e.getMessage()));

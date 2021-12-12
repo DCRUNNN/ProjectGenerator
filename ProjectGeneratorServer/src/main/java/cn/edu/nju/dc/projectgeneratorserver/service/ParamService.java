@@ -12,7 +12,7 @@ public interface ParamService {
 
     int insertPublicParam(ParamPO paramPO);
 
-    int insertTemplateParam(ParamPO paramPO);
+    int updatePublicParam(ParamPO paramPO);
 
     List<ParamPO> listByTemplateID(int templateID);
 

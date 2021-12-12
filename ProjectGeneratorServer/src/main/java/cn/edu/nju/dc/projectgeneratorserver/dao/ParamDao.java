@@ -18,7 +18,11 @@ public interface ParamDao {
 
     int insertParam(@Param("param") ParamPO paramPO) throws DuplicateKeyException;
 
+    int updateParam(@Param("param") ParamPO paramPO);
+
     int insertTemplateParamRelation(@Param("relation") TemplateParamRelationPO relationPO) throws DuplicateKeyException;
+
+    int deleteByTemplateID(@Param("templateID") int templateID);
 
     List<ParamPO> listByTemplateID(@Param("templateID") int templateID);
 

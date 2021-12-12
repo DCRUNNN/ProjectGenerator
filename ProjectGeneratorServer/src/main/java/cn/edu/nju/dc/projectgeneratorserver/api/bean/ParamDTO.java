@@ -13,9 +13,14 @@ public class ParamDTO {
 
     private int templateID;
 
-    private String name;
+    private String nameEN;
+
+    private String nameCN;
 
     private String description;
+
+    // 参数对应的类型，如字符串、整型、数组等
+    private String fieldType;
 
     // 1：公参；2：私参
     private int type;

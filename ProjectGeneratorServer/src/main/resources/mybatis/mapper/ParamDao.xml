@@ -5,11 +5,11 @@
 <mapper namespace="cn.edu.nju.dc.projectgeneratorserver.dao.ParamDao">
 
   <sql id="all_columns">
-    id, template_id, `name`, description, `type`, create_time, update_time
+    id, template_id, name_cn, name_en , description, `type`, field_type, create_time, update_time
   </sql>
 
   <sql id="param_all_columns">
-    id, `name`, description, `type`, create_time, update_time
+    id, name_cn, name_en, description, `type`, field_type, create_time, update_time
   </sql>
 
   <sql id="template_param_all_columns">
@@ -19,18 +19,22 @@
   <resultMap id="TemplateParamMap" type="ParamPO">
     <result column="id" property="id" jdbcType="INTEGER"/>
     <result column="template_id" property="templateID" jdbcType="INTEGER"/>
-    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="name_cn" property="nameCN" jdbcType="VARCHAR"/>
+    <result column="name_en" property="nameEN" jdbcType="VARCHAR"/>
     <result column="description" property="description" jdbcType="VARCHAR"/>
     <result column="type" property="type" jdbcType="INTEGER"/>
+    <result column="field_type" property="fieldType" jdbcType="VARCHAR"/>
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
   </resultMap>
 
   <resultMap id="PublicParamMap" type="ParamPO">
     <result column="id" property="id" jdbcType="INTEGER"/>
-    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="name_cn" property="nameCN" jdbcType="VARCHAR"/>
+    <result column="name_en" property="nameEN" jdbcType="VARCHAR"/>
     <result column="description" property="description" jdbcType="VARCHAR"/>
     <result column="type" property="type" jdbcType="INTEGER"/>
+    <result column="field_type" property="fieldType" jdbcType="VARCHAR"/>
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
   </resultMap>
@@ -39,10 +43,22 @@
     INSERT INTO t_param (<include refid="param_all_columns"/>)
     VALUES
     (
-    #{param.id}, #{param.name}, #{param.description}, #{param.type},
+    #{param.id}, #{param.nameCN}, #{param.nameEN}, #{param.description}, #{param.type}, #{param.fieldType},
     #{param.createTime}, #{param.updateTime}
     )
   </insert>
+
+  <update id="updateParam" parameterType="ParamPO">
+    UPDATE t_param
+    SET
+    <if test="param.nameCN != null">name_cn = #{param.nameCN},</if>
+    <if test="param.nameEN != null">name_en = #{param.nameEN},</if>
+    <if test="param.description != null">`description` = #{param.description},</if>
+    <if test="param.fieldType != null">field_type = #{param.fieldType},</if>
+    update_time = #{param.updateTime}
+    WHERE
+    id = #{param.id}
+  </update>
 
   <insert id="insertTemplateParamRelation" parameterType="TemplateParamRelationPO">
     INSERT INTO t_template_param (<include refid="template_param_all_columns"/>)
@@ -52,6 +68,9 @@
     )
   </insert>
 
+  <delete id="deleteByTemplateID">
+    DELETE FROM t_template_param where template_id = #{templateID}
+  </delete>
 
   <select id="listByTemplateID" resultMap="TemplateParamMap">
     SELECT

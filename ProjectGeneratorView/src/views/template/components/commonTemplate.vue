@@ -5,9 +5,12 @@
         <el-form>
           <el-form-item>
             <el-row :gutter="15" type="flex">
-              <el-col :span="2">
+              <el-col :span="6">
                 <el-button type="primary" size="small" icon="el-icon-plus"
                            @click.native.prevent="saveTemplateDialogVisible=true">保存
+                </el-button>
+                <el-button type="primary" size="small" icon="el-icon-plus"
+                           @click.native.prevent="createFirstLevelFileDialogVisible=true">新建
                 </el-button>
               </el-col>
             </el-row>
@@ -22,12 +25,14 @@
                     <div class="custom-tree-container">
                       <div class="block">
                         <p>项目模板</p>
+                        <!--  TODO 完善这里的拖拽逻辑（文件夹不能拖到文件下方）-->
                         <el-tree :data="templateDTO.content"
                                  :props="defaultProps"
                                  node-key="id"
                                  @node-click="handleNodeClick"
                                  default-expand-all
-                                 :expand-on-click-node="false">
+                                 draggable
+                        :expand-on-click-node="false">
                         <span class="custom-tree-node" slot-scope="{ node, data }">
                           <span>
                             <i :class="data.fileType===1 ? 'el-icon-folder' : 'el-icon-document'"
@@ -73,10 +78,16 @@
                               stripe border fit highlight-current-row>
                       <el-table-column type="selection" width="55">
                       </el-table-column>
-                      <el-table-column label="参数名称" align="center" prop="name" min-width="60%">
+                      <el-table-column label="参数中文名称" align="center" prop="name" min-width="60%">
                         <template slot-scope="scope">
                           <i class="el-icon-place"></i>
-                          <span v-text="scope.row.name"></span>
+                          <span v-text="scope.row.nameCN"></span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="参数英文名称" align="center" prop="name" min-width="60%">
+                        <template slot-scope="scope">
+                          <i class="el-icon-place"></i>
+                          <span v-text="scope.row.nameEN"></span>
                         </template>
                       </el-table-column>
                       <el-table-column label="参数简介" align="center" prop="description" min-width="50%">
@@ -107,12 +118,12 @@
             <div class="right-container">
               <el-card class="editor-box">
                 <div slot="header" class="clearfix">
-                  <span>文件内容</span>
+                  <span>文件内容：</span>
+                  <el-tag effect="dark">{{ currentFile.name }}</el-tag>
                   <el-button @click="saveFileContent" icon="el-icon-check" style="float: right; padding: 3px 0"
                              type="text">保存
                   </el-button>
                 </div>
-                <!--                <prism-editor v-model="currentNode.content" language="js" :readonly="true"></prism-editor>-->
                 <MyEditor
                   ref="monacoEditor"
                   :language="currentFile.language"
@@ -126,7 +137,28 @@
         </split-pane>
       </div>
 
-      <el-dialog title="提示" :visible.sync="createFileDialogVisible" width="20%">
+      <el-dialog title="新建第一级文件/文件夹" :visible.sync="createFirstLevelFileDialogVisible" width="20%">
+        <el-form :model="createFileForm" :rules="createFileFormRules" ref="createFirstLevelFileForm"
+                 label-position="right"
+                 label-width="80px">
+          <el-form-item label="文件类型" prop="fileType">
+            <el-select v-model="createFileForm.fileType" placeholder="请选择新建的文件类型">
+              <el-option label="文件夹" value=1></el-option>
+              <el-option label="文件" value=2></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="文件名称" prop="name">
+            <el-input v-model="createFileForm.name"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="resetForm('createFirstLevelFileForm'); createFirstLevelFileDialogVisible = false">取消
+            </el-button>
+            <el-button type="primary" @click="createFirstLevelFile('createFirstLevelFileForm')">确定</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+
+      <el-dialog title="新建文件/文件夹" :visible.sync="createFileDialogVisible" width="30%">
         <el-form :model="createFileForm" :rules="createFileFormRules" ref="createFileForm" label-position="right"
                  label-width="80px">
           <el-form-item label="文件类型" prop="fileType">
@@ -216,8 +248,9 @@
 <script>
   import splitPane from 'vue-splitpane'
   import MyEditor from '../../../components/MonacoEditor'
-  import { listAllPublicParams } from '@/api/param'
-  import { getByTemplateID, insertTemplate } from '@/api/template'
+  import {listAllPublicParams} from '@/api/param'
+  import {getByTemplateID, insertTemplate, updateTemplate} from '@/api/template'
+
   const defaultTemplateData = [{
     id: 1,
     name: 'main',
@@ -308,7 +341,7 @@
         currentFile: {
           name: "",
           fileType: 1,
-          language: "css",
+          language: "plaintext",
           content: "请点击左侧文件以查看文件内容",
         },
         currentNode: null,
@@ -317,6 +350,7 @@
           label: 'name'
         },
         createFileDialogVisible: false,
+        createFirstLevelFileDialogVisible: false,
         opts: {
           value: '',
           readOnly: false, // 是否可编辑
@@ -367,6 +401,7 @@
       // 点击保存按钮
       saveFileContent() {
         this.currentFile.content = this.$refs.monacoEditor.getEditorValue()
+        // TODO 设置this.currentFile.language
         this.currentContentHasChanged = false
       },
       onMounted() {
@@ -402,6 +437,45 @@
         }).catch(() => {
           this.currentFile = clickedFile
           this.currentContentHasChanged = false
+        })
+      },
+      createFirstLevelFile(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (!valid) {
+            this.$message({
+              type: 'waring',
+              message: '请检查输入'
+            });
+            this.createFirstLevelFileDialogVisible = false
+            return false;
+          }
+          if (this.createFileForm.fileType === "1") { // 文件夹
+            const newFile = {
+              id: id++,
+              name: this.createFileForm.name,
+              fileType: 1,
+              children: []
+            };
+            if (!this.templateDTO.content) {
+              this.$set(this.templateDTO, 'content', []);
+            }
+            this.templateDTO.content.push(newFile);
+            this.createFirstLevelFileDialogVisible = false
+          } else if (this.createFileForm.fileType === "2") { // 文件
+            const newFile = {
+              id: id++,
+              name: this.createFileForm.name,
+              fileType: 2,
+              content: "new new new",
+              language: "plaintext",
+              children: []
+            };
+            if (!this.templateDTO.content) {
+              this.$set(this.templateDTO, 'content', []);
+            }
+            this.templateDTO.content.push(newFile);
+            this.createFirstLevelFileDialogVisible = false
+          }
         })
       },
       createFile(formName) {
@@ -475,7 +549,7 @@
         const index = children.findIndex(d => d.id === data.id);
         children.splice(index, 1);
       },
-      getTemplateByID(templateID){
+      getTemplateByID(templateID) {
         getByTemplateID(templateID).then(response => {
           let resultTemplateDTO = response.data
           this.templateDTO = {
@@ -497,12 +571,32 @@
         })
       },
       saveTemplate() {
+        this.saveTemplateBtnLoading = true;
         this.$refs.saveTemplateForm.validate(valid => {
-          if (valid) {
-            this.saveTemplateBtnLoading = true;
+          if (!valid) {
+            this.saveTemplateBtnLoading = false;
+            return
+          }
+          if (!this.isEdit) {
+            // TODO set template author
             insertTemplate(this.templateDTO).then(response => {
               if (response.returnCode === 200) {
                 this.$message.success('保存模板成功');
+                this.saveTemplateDialogVisible = false;
+                this.saveTemplateBtnLoading = false;
+              } else {
+                this.$message.error(response.message);
+                console.error(response);
+                this.saveTemplateBtnLoading = false
+              }
+            }).catch(error => {
+              console.error(error);
+              this.saveTemplateBtnLoading = false;
+            })
+          } else {
+            updateTemplate(this.templateDTO).then(response => {
+              if (response.returnCode === 200) {
+                this.$message.success('更新模板成功');
                 this.saveTemplateDialogVisible = false;
                 this.saveTemplateBtnLoading = false;
               } else {
@@ -536,11 +630,10 @@
       },
       setSelectParams() {
         let selectedParamIDSet = new Set()
-        console.log(this.templateDTO)
         this.templateDTO.paramList.forEach(p => selectedParamIDSet.add(p.id))
-        this.paramList.forEach(row=>{
-          if(selectedParamIDSet.has(row.id)){
-            this.$refs.paramListTable.toggleRowSelection(row,true);
+        this.paramList.forEach(row => {
+          if (selectedParamIDSet.has(row.id)) {
+            this.$refs.paramListTable.toggleRowSelection(row, true);
           }
         });
       },

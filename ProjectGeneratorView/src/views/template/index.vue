@@ -4,21 +4,19 @@
       <el-form>
         <el-form-item>
           <el-row :gutter="15" type="flex">
-            <el-col :span="2">
+            <el-col :span="6">
               <el-button type="primary" size="small" icon="el-icon-refresh"
                          @click.native.prevent="">刷新
               </el-button>
-            </el-col>
-            <el-col :span="2">
               <el-button type="primary" size="small" icon="el-icon-plus"
                          @click.native.prevent="">新增
               </el-button>
             </el-col>
-            <el-col :span="7">
+            <el-col :span="8" :offset="10">
               <el-input
                 v-model="searchText"
                 size="medium"
-                placeholder="输入参数名进行搜索..."/>
+                placeholder="输入模板名进行搜索..."/>
             </el-col>
           </el-row>
         </el-form-item>
@@ -28,19 +26,19 @@
                 v-loading.body="listLoading"
                 element-loading-text="全力加载中..."
                 stripe border fit highlight-current-row>
-        <el-table-column label="参数ID" align="center" prop="id" min-width="40%">
+        <el-table-column label="模板ID" align="center" prop="id" min-width="40%">
           <template slot-scope="scope">
             <i class="el-icon-user"></i>
             <span v-text="scope.row.id"></span>
           </template>
         </el-table-column>
-        <el-table-column label="参数名称" align="center" prop="name" min-width="60%">
+        <el-table-column label="模板名称" align="center" prop="name" min-width="60%">
           <template slot-scope="scope">
             <i class="el-icon-place"></i>
             <span v-text="scope.row.name"></span>
           </template>
         </el-table-column>
-        <el-table-column label="参数简介" align="center" prop="description" min-width="50%">
+        <el-table-column label="模板简介" align="center" prop="description" min-width="50%">
           <template slot-scope="scope">
             <i class="el-icon-chat-dot-round"></i>
             <span v-text="scope.row.description"></span>
@@ -64,7 +62,7 @@
               <router-link :to="'/template/edit/'+scope.row.id">
                 <el-button type="primary" size="mini" icon="el-icon-document">修改</el-button>
               </router-link>
-              <el-button type="danger" size="mini" icon="el-icon-delete"
+              <el-button type="warning" size="mini" icon="el-icon-delete"
                          @click.native.prevent="deleteTemplate(scope.row.id)">删除
               </el-button>
             </el-button-group>

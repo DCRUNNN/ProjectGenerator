@@ -12,7 +12,7 @@
     content_id, content
   </sql>
 
-  <resultMap id="BaseResultMap" type="TemplatePO">
+  <resultMap id="TemplateWithoutParamMap" type="TemplatePO">
     <result column="id" property="id" jdbcType="INTEGER"/>
     <result column="name" property="name" jdbcType="VARCHAR"/>
     <result column="description" property="description" jdbcType="VARCHAR"/>
@@ -21,6 +21,20 @@
     <result column="content" property="content" jdbcType="LONGVARCHAR"/>
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <resultMap id="TemplateWithParamMap" type="TemplatePO" extends="TemplateWithoutParamMap">
+    <collection property="paramList" ofType="ParamPO">
+      <!-- 名称重复,这里通过别名来解决-->
+      <result column="param_id" property="id" jdbcType="INTEGER"/>
+      <result column="param_name_cn" property="nameCN" jdbcType="VARCHAR"/>
+      <result column="param_name_en" property="nameEN" jdbcType="VARCHAR"/>
+      <result column="param_description" property="description" jdbcType="VARCHAR"/>
+      <result column="param_type" property="type" jdbcType="INTEGER"/>
+      <result column="param_field_type" property="fieldType" jdbcType="VARCHAR"/>
+      <result column="param_create_time" property="createTime" jdbcType="TIMESTAMP"/>
+      <result column="param_update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </collection>
   </resultMap>
 
   <insert id="insertTemplate" parameterType="TemplatePO" useGeneratedKeys="true" keyProperty="template.id">
@@ -32,6 +46,16 @@
     )
   </insert>
 
+  <update id="updateTemplate" parameterType="TemplatePO">
+    UPDATE t_template
+    SET
+    <if test="template.name != null">`name` = #{template.name},</if>
+    <if test="template.description != null">description = #{template.description},</if>
+    update_time = #{template.updateTime}
+    WHERE
+    id = #{template.id}
+  </update>
+
   <insert id="insertTemplateContent" parameterType="TemplateContentPO" useGeneratedKeys="true" keyProperty="content.contentID">
     INSERT INTO t_template_content (<include refid="content_columns"/>)
     VALUES
@@ -40,15 +64,27 @@
     )
   </insert>
 
-  <select id="getByID" resultMap="BaseResultMap">
+  <update id="updateTemplateContent" parameterType="TemplateContentPO">
+    UPDATE t_template_content
+    SET
+    content = #{content.content}
+    WHERE
+    content_id = #{content.contentID}
+  </update>
+
+  <select id="getByID" resultMap="TemplateWithParamMap">
     SELECT
-    t.*, c.content
-    FROM t_template t, t_template_content c
+    t.*, c.content, param.id AS param_id, param.name_cn AS param_name_cn, param.name_en AS param_name_en,
+    param.description AS param_description, param.type AS param_type, param.field_type AS param_field_type,
+    param.create_time AS param_create_time, param.update_time AS param_update_time
+    FROM t_template t, t_template_content c, t_param param, t_template_param relation
     WHERE t.id = #{templateID}
     AND t.content_id = c.content_id
+    AND relation.template_id = t.id
+    AND param.id = relation.param_id
   </select>
 
-  <select id="listAll" resultMap="BaseResultMap">
+  <select id="listAll" resultMap="TemplateWithoutParamMap">
     SELECT
     t.*, c.content
     FROM t_template t, t_template_content c

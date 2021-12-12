@@ -2,16 +2,14 @@ package cn.edu.nju.dc.projectgeneratorserver.service.impl;
 
 import cn.edu.nju.dc.projectgeneratorserver.dao.ParamDao;
 import cn.edu.nju.dc.projectgeneratorserver.dao.po.ParamPO;
-import cn.edu.nju.dc.projectgeneratorserver.dao.po.TemplateParamRelationPO;
 import cn.edu.nju.dc.projectgeneratorserver.service.ParamService;
-import cn.edu.nju.dc.projectgeneratorserver.support.exception.ServiceException;
+import cn.edu.nju.dc.projectgeneratorserver.utils.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author dc
@@ -26,22 +24,16 @@ public class ParamServiceImpl implements ParamService {
 
     @Override
     public int insertPublicParam(ParamPO paramPO) {
-        log.info("paramPO=[{}]", paramPO);
+        paramPO.setCreateTime(DateUtil.getCurrentFormatTime());
+        paramPO.setUpdateTime(DateUtil.getCurrentFormatTime());
         return paramDao.insertParam(paramPO);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int insertTemplateParam(ParamPO paramPO) {
-        int templateID = paramPO.getTemplateID();
-        if (templateID <= 0) {
-            throw new ServiceException(String.format("[insertTemplateParam] invalid templateID [%d]", templateID));
-        }
-        paramDao.insertParam(paramPO);
-        TemplateParamRelationPO relationPO = new TemplateParamRelationPO();
-        relationPO.setTemplateID(templateID);
-        relationPO.setParamID(paramPO.getId());
-        return paramDao.insertTemplateParamRelation(relationPO);
+    public int updatePublicParam(ParamPO paramPO) {
+        // TODO 发送消息，更新模板中的引用
+        paramPO.setUpdateTime(DateUtil.getCurrentFormatTime());
+        return paramDao.updateParam(paramPO);
     }
 
     @Override

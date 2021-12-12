@@ -13,6 +13,8 @@ public interface TemplateService {
 
     int insertTemplate(TemplatePO templatePO) throws DBException;
 
+    int updateTemplate(TemplatePO templatePO) throws DBException;
+
     TemplateDTO getById(int templateID);
 
     PageInfo<TemplateDTO> listAll(int page, int size);

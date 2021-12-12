@@ -43,6 +43,20 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
+    path: '/generator',
+    component: Layout,
+    redirect: '/generator/index',
+    icon: 'documentation',
+    noDropDown: true,
+    children: [
+      {
+        path: 'index',
+        name: '创建工程',
+        component: () => import('@/views/generator/index'),
+      },
+    ]
+  },
+  {
     path: '/template',
     component: Layout,
     name: '模板管理',
@@ -53,14 +67,14 @@ export const asyncRouterMap = [
         path: 'create',
         name: '新建模板',
         component: () => import('@/views/template/create'),
-        meta: { permission: ['template:list'] },
+        meta: { permission: ['template:insert'] },
         icon: 'form',
       },
       {
         path: 'edit/:id(\\d+)',
         name: '编辑模板',
         component: () => import('@/views/template/edit'),
-        meta: { permission: ['template:list'] },
+        meta: { permission: ['template:update'] },
         icon: 'form',
         hidden: true
       },

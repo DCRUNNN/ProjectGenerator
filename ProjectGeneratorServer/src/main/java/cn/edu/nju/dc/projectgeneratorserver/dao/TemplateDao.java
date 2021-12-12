@@ -18,7 +18,11 @@ public interface TemplateDao {
 
     int insertTemplate(@Param("template") TemplatePO templatePO) throws DuplicateKeyException;
 
+    int updateTemplate(@Param("template") TemplatePO templatePO);
+
     int insertTemplateContent(@Param("content") TemplateContentPO templateContentPO) throws DuplicateKeyException;
+
+    int updateTemplateContent(@Param("content") TemplateContentPO templateContentPO);
 
     TemplatePO getByID(@Param("templateID") int templateID);
 
