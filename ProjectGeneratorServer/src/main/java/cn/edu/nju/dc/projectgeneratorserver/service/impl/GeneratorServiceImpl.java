@@ -52,6 +52,9 @@ public class GeneratorServiceImpl implements GeneratorService {
     public GenerateProjectResultDTO generateProject(ProjectDTO projectDTO) {
         log.info("projectDTO is {}", projectDTO);
         TemplatePO templatePO = templateDao.getByID(projectDTO.getTemplateID());
+        if (templatePO == null) {
+            throw new ServiceException("项目模板不存在");
+        }
         String contentStr = templatePO.getContent();
         boolean isArray = StringUtils.startsWith(contentStr, "[") && StringUtils.endsWith(contentStr, "]");
         if (!isArray) {
