@@ -273,7 +273,7 @@
       fileType: 1,
       children: [{
         id: 9,
-        name: 'ProjectGeneratorServerMain',
+        name: 'ProjectGeneratorServerMain.java',
         language: "java",
         fileType: 2,
         content: "public static void main(String[] args) {\n"
