@@ -81,7 +81,8 @@
                          @click.native.prevent="showUpdateParamDialog(scope.row)">修改
               </el-button>
               <el-button type="warning" size="mini" icon="el-icon-delete"
-                         @click.native.prevent="deleteParam(scope.id)">删除
+                         :loading="deleteParamBtnLoading"
+                         @click.native.prevent="deleteParam(scope.row.nameEN, scope.row.id)">删除
               </el-button>
             </el-button-group>
           </template>
@@ -169,7 +170,7 @@
 </style>
 
 <script>
-  import { listAllPublicParams, insertPublicParam, updatePublicParam} from '@/api/param'
+  import { listAllPublicParams, insertPublicParam, updatePublicParam, deletePublicParam} from '@/api/param'
 
   export default {
     name: 'ParamManage',
@@ -212,6 +213,7 @@
         ],
         createParamDialogVisible: false,
         createParamBtnLoading: false,
+        deleteParamBtnLoading: false,
         searchText: '',
         paramList: [],
         listLoading: false,
@@ -297,7 +299,7 @@
           })
         })
       },
-      updatePublicParam(paramID) {
+      updatePublicParam() {
         this.createParamBtnLoading = true;
         this.$refs.tempParamForm.validate(valid => {
           if (!valid) {
@@ -321,8 +323,28 @@
           })
         })
       },
-      deleteParam(paramID) {
-        this.$message.warning("马上支持")
+      deleteParam(paramNameEN, paramID) {
+        this.$confirm('您确认要删除 ' + paramNameEN + ' 参数吗?', 'Warning', {
+          confirmButtonText: '删除',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.deleteParamBtnLoading = true
+          deletePublicParam(paramID).then(response => {
+            if (response.returnCode === 200) {
+              this.$message.success('删除公共参数成功');
+              this.deleteParamBtnLoading = false
+              this.listAllPublicParams();
+            } else {
+              this.$message.error(response.message);
+              this.deleteParamBtnLoading = false
+              console.error(response);
+            }
+          }).catch(error => {
+            console.error(error);
+            this.deleteParamBtnLoading = false
+          })
+        });
       },
       handleSizeChange(size) {
         this.size = size;

@@ -24,6 +24,10 @@ public interface ParamDao {
 
     int deleteByTemplateID(@Param("templateID") int templateID);
 
+    int deleteByParamID(@Param("paramID") int paramID);
+
+    boolean isParamInUse(@Param("paramID") int paramID);
+
     List<ParamPO> listByTemplateID(@Param("templateID") int templateID);
 
     List<ParamPO> listAllPublicParam();

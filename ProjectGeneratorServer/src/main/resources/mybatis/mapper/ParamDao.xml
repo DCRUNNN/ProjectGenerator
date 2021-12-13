@@ -72,6 +72,18 @@
     DELETE FROM t_template_param where template_id = #{templateID}
   </delete>
 
+  <delete id="deleteByParamID">
+    DELETE
+    FROM t_param
+    Where id = #{paramID}
+  </delete>
+
+  <select id="isParamInUse" resultType="Boolean">
+    SELECT count(1)
+    FROM t_template_param
+    WHERE param_id = #{paramID}
+  </select>
+
   <select id="listByTemplateID" resultMap="TemplateParamMap">
     SELECT
     <include refid="all_columns"/>

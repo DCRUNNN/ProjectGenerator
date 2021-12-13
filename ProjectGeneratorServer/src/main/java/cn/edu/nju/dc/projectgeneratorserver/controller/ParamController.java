@@ -41,6 +41,13 @@ public class ParamController {
         return BaseResultUtil.createOkResult(paramService.updatePublicParam(ParamPO.valueOf(paramDTO)));
     }
 
+    @PreAuthorize("hasAuthority('param:delete')")
+    @RequestMapping(path = "/deletePublicParam", method = RequestMethod.GET)
+    @Log(description = "删除公参")
+    public BaseResult deletePublicParam(@RequestParam int paramID) {
+        return BaseResultUtil.createOkResult(paramService.deleteByParamID(paramID));
+    }
+
     @PreAuthorize("hasAuthority('param:list')")
     @RequestMapping(path = "/listByTemplateID", method = RequestMethod.GET)
     public BaseResult listByTemplateID(@RequestParam int templateID) {

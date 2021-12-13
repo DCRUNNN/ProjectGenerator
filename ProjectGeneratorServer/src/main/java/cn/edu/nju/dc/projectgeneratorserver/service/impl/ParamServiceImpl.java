@@ -3,6 +3,7 @@ package cn.edu.nju.dc.projectgeneratorserver.service.impl;
 import cn.edu.nju.dc.projectgeneratorserver.dao.ParamDao;
 import cn.edu.nju.dc.projectgeneratorserver.dao.po.ParamPO;
 import cn.edu.nju.dc.projectgeneratorserver.service.ParamService;
+import cn.edu.nju.dc.projectgeneratorserver.support.exception.ServiceException;
 import cn.edu.nju.dc.projectgeneratorserver.utils.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -34,6 +35,15 @@ public class ParamServiceImpl implements ParamService {
         // TODO 发送消息，更新模板中的引用
         paramPO.setUpdateTime(DateUtil.getCurrentFormatTime());
         return paramDao.updateParam(paramPO);
+    }
+
+    @Override
+    public int deleteByParamID(int paramID) {
+        // 在使用的参数不能删除
+        if (paramDao.isParamInUse(paramID)) {
+            throw new ServiceException("不允许删除正在使用的参数");
+        }
+        return paramDao.deleteByParamID(paramID);
     }
 
     @Override

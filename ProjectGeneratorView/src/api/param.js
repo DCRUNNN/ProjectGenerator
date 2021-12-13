@@ -26,3 +26,13 @@ export function updatePublicParam(paramForm) {
     data: paramForm
   })
 }
+
+export function deletePublicParam(paramID) {
+  return request({
+    url: '/param/deletePublicParam',
+    method: 'get',
+    params: {
+      paramID: paramID,
+    }
+  })
+}

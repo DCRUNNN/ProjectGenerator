@@ -14,6 +14,8 @@ public interface ParamService {
 
     int updatePublicParam(ParamPO paramPO);
 
+    int deleteByParamID(int paramID);
+
     List<ParamPO> listByTemplateID(int templateID);
 
     PageInfo<ParamPO> listAllPublicParams(int page, int size);
