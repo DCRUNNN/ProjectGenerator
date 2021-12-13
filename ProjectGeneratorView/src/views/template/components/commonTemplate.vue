@@ -6,11 +6,11 @@
           <el-form-item>
             <el-row :gutter="15" type="flex">
               <el-col :span="6">
-                <el-button type="primary" size="small" icon="el-icon-plus"
+                <el-button type="primary" size="small" icon="el-icon-check"
                            @click.native.prevent="saveTemplateDialogVisible=true">保存
                 </el-button>
                 <el-button type="primary" size="small" icon="el-icon-plus"
-                           @click.native.prevent="createFirstLevelFileDialogVisible=true">新建
+                           @click.native.prevent="createFirstLevelFileDialogVisible=true">新建文件&nbsp;/&nbsp;文件夹
                 </el-button>
               </el-col>
             </el-row>
@@ -80,20 +80,32 @@
                       </el-table-column>
                       <el-table-column label="参数中文名称" align="center" prop="name" min-width="60%">
                         <template slot-scope="scope">
-                          <i class="el-icon-place"></i>
+                          <i class="el-icon-connection"></i>
                           <span v-text="scope.row.nameCN"></span>
                         </template>
                       </el-table-column>
                       <el-table-column label="参数英文名称" align="center" prop="name" min-width="60%">
                         <template slot-scope="scope">
-                          <i class="el-icon-place"></i>
+                          <i class="el-icon-connection"></i>
                           <span v-text="scope.row.nameEN"></span>
                         </template>
                       </el-table-column>
                       <el-table-column label="参数简介" align="center" prop="description" min-width="50%">
                         <template slot-scope="scope">
-                          <i class="el-icon-chat-dot-round"></i>
+                          <i class="el-icon-info"></i>
                           <span v-text="scope.row.description"></span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="参数类型" align="center" prop="name" min-width="60%">
+                        <template slot-scope="scope">
+                          <i :class="scope.row.type===1? 'el-icon-star-on': 'el-icon-star-off'"></i>
+                          <span v-text="scope.row.type===1?'模板公参':'模板私参'"></span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="字段类型" align="center" prop="name" min-width="60%">
+                        <template slot-scope="scope">
+                          <i class=el-icon-magic-stick></i>
+                          <span v-text="scope.row.fieldType"></span>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -292,20 +304,6 @@
         fileType: 2,
         language: "yaml",
         content: "context-path: /ProjectGenerator/prod"
-      },
-      {
-        id: 8,
-        name: 'index.html',
-        fileType: 2,
-        language: "html",
-        content: "<div>this is html</div>"
-      },
-      {
-        id: 9,
-        name: 'global.css',
-        fileType: 2,
-        language: "css",
-        content: "body{}"
       }]
   }];
 
@@ -339,7 +337,7 @@
         editor: null,
         currentContentHasChanged: false,
         currentFile: {
-          name: "",
+          name: "请点击左侧文件以查看文件内容",
           fileType: 1,
           language: "plaintext",
           content: "请点击左侧文件以查看文件内容",

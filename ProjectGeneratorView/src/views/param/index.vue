@@ -26,39 +26,33 @@
                 v-loading.body="listLoading"
                 element-loading-text="全力加载中..."
                 stripe border fit highlight-current-row>
-        <el-table-column label="参数ID" align="center" prop="id" min-width="40%">
-          <template slot-scope="scope">
-            <i class="el-icon-user"></i>
-            <span v-text="scope.row.id"></span>
-          </template>
-        </el-table-column>
         <el-table-column label="参数中文名称" align="center" prop="nameCN" min-width="60%">
           <template slot-scope="scope">
-            <i class="el-icon-place"></i>
+            <i class="el-icon-connection"></i>
             <span v-text="scope.row.nameCN"></span>
           </template>
         </el-table-column>
         <el-table-column label="参数英文名称" align="center" prop="nameEN" min-width="60%">
           <template slot-scope="scope">
-            <i class="el-icon-place"></i>
+            <i class="el-icon-connection"></i>
             <span v-text="scope.row.nameEN"></span>
           </template>
         </el-table-column>
         <el-table-column label="参数简介" align="center" prop="description" min-width="50%">
           <template slot-scope="scope">
-            <i class="el-icon-chat-dot-round"></i>
+            <i class="el-icon-info"></i>
             <span v-text="scope.row.description"></span>
           </template>
         </el-table-column>
         <el-table-column label="参数类型" align="center" prop="type" min-width="50%">
           <template slot-scope="scope">
-            <i class="el-icon-chat-dot-round"></i>
+            <i :class="scope.row.type===1? 'el-icon-star-on': 'el-icon-star-off'"></i>
             <span v-text="scope.row.type===1?'模板公参':'模板私参'"></span>
           </template>
         </el-table-column>
         <el-table-column label="字段类型" align="center" prop="type" min-width="50%">
           <template slot-scope="scope">
-            <i class="el-icon-chat-dot-round"></i>
+            <i class=el-icon-magic-stick></i>
             <span v-text="scope.row.fieldType"></span>
           </template>
         </el-table-column>

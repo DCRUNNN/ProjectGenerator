@@ -4,6 +4,11 @@
       <div class="components-container">
         <el-row type="flex">
           <el-col :span="10">
+            <el-steps :active="3" align-center>
+              <el-step title="步骤 1" icon="el-icon-s-data" description="选择项目模板"></el-step>
+              <el-step title="步骤 2" icon="el-icon-edit" description="填写模板参数"></el-step>
+              <el-step title="步骤 3" icon="el-icon-download" description="生成项目代码"></el-step>
+            </el-steps>
             <el-form label-position="top" label-width="120px">
               <el-form-item label="1. 选择项目模板">
                 <el-select v-model="templateID" size="mini" placeholder="请选择模板" @change="getFormSchema">
@@ -18,12 +23,13 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="2. 填写模板参数">
-                <ncform :form-schema="formSchema" form-name="projectGeneratorForm"
-                        v-model="formSchema.value">
-                </ncform>
+                <el-card shadow="always">
+                  <ncform :form-schema="formSchema" form-name="projectGeneratorForm" v-model="formSchema.value">
+                  </ncform>
+                </el-card>
               </el-form-item>
-              <el-form-item>
-                <el-button @click="generateProject()">Submit</el-button>
+              <el-form-item label="3. 生成项目代码">
+                <el-button type="primary" icon="el-icon-download" @click.native.prevent="generateProject()">创建项目</el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -49,7 +55,7 @@
     watch: {},
     data() {
       return {
-        templateID: 0,
+        templateID: '',
         allTemplates: [],
         formSchema: {
           "type": "object",

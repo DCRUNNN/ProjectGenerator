@@ -46,7 +46,7 @@ export const asyncRouterMap = [
     path: '/generator',
     component: Layout,
     redirect: '/generator/index',
-    icon: 'documentation',
+    icon: 'guide',
     noDropDown: true,
     children: [
       {
@@ -61,21 +61,21 @@ export const asyncRouterMap = [
     component: Layout,
     name: '模板管理',
     redirect: '/template/index',
-    icon: 'documentation',
+    icon: 'form',
     children: [
       {
         path: 'create',
         name: '新建模板',
         component: () => import('@/views/template/create'),
         meta: { permission: ['template:insert'] },
-        icon: 'form',
+        icon: 'edit',
       },
       {
         path: 'edit/:id(\\d+)',
         name: '编辑模板',
         component: () => import('@/views/template/edit'),
         meta: { permission: ['template:update'] },
-        icon: 'form',
+        icon: 'edit',
         hidden: true
       },
       {
@@ -83,7 +83,7 @@ export const asyncRouterMap = [
         name: '模板列表',
         component: () => import('@/views/template/index'),
         meta: { permission: ['template:list'] },
-        icon: 'form',
+        icon: 'list',
       },
     ]
   },
@@ -91,14 +91,14 @@ export const asyncRouterMap = [
     path: '/param',
     component: Layout,
     redirect: '/param/index',
-    icon: 'documentation',
+    icon: 'shopping',
     noDropDown: true,
     children: [
       {
         path: 'index',
         name: '参数管理',
         component: () => import('@/views/param/index'),
-        //meta: { permission: ['params:list'] }
+        meta: { permission: ['params:list'] }
       },
     ]
   },
@@ -107,19 +107,19 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/log/businessLog',
     name: '系统监控',
-    icon: 'documentation',
+    icon: 'chart',
     children: [
       {
         path: 'businessLog',
         name: '业务日志 ',
         component: () => import('@/views/log/bizLog'),
-        icon: 'list'
+        icon: 'documentation'
       },
       {
         path: 'errorLog',
         name: '异常日志',
         component: () => import('@/views/log/errorLog'),
-        icon: 'form'
+        icon: 'bug'
       }
     ]
   },

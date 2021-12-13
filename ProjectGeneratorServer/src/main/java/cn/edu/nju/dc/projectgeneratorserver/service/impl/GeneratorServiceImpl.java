@@ -11,12 +11,12 @@ import cn.edu.nju.dc.projectgeneratorserver.service.GeneratorService;
 import cn.edu.nju.dc.projectgeneratorserver.support.exception.ServiceException;
 import cn.edu.nju.dc.projectgeneratorserver.support.freemarker.FreemarkerUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
@@ -155,7 +155,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         JSONObject schema = new JSONObject();
         schema.put("type", "object");
-        JSONObject properties = new JSONObject();
+        JSONObject properties = new JSONObject(true); // 字段填写期望有顺序要求
         schema.put("properties", properties);
 
         // 项目名称（生成的项目的文件名）
@@ -163,10 +163,11 @@ public class GeneratorServiceImpl implements GeneratorService {
         nameProperty.put("type", "string");
         JSONObject nameUIProperty = new JSONObject();
         nameUIProperty.put("label", "项目名称");
+        nameUIProperty.put("description", "生成的项目的文件名");
 
         JSONObject widgetConfig = new JSONObject();
         JSONObject compoundConfig = new JSONObject();
-        compoundConfig.put("appendLabel", "string");
+        compoundConfig.put("prependLabel", "string");
         widgetConfig.put("compound", compoundConfig);
         nameUIProperty.put("widgetConfig", widgetConfig);
 
@@ -176,6 +177,12 @@ public class GeneratorServiceImpl implements GeneratorService {
         helpObject.put("content", "生成的项目的文件名");
         nameUIProperty.put("help", helpObject);
         nameProperty.put("ui", nameUIProperty);
+
+        // 设置必填字段
+        JSONObject requiredRule = new JSONObject();
+        requiredRule.put("required", true);
+        nameProperty.put("rules", requiredRule);
+
         properties.put("projectName", nameProperty);
 
         // 项目需要填写的参数
@@ -202,11 +209,12 @@ public class GeneratorServiceImpl implements GeneratorService {
 
                 JSONObject paramWidgetConfig = new JSONObject();
                 JSONObject paramCompoundConfig = new JSONObject();
-                paramCompoundConfig.put("appendLabel", paramPO.getFieldType());
+                paramCompoundConfig.put("prependLabel", paramPO.getFieldType());
                 paramWidgetConfig.put("compound", paramCompoundConfig);
                 paramUIProperty.put("widgetConfig", paramWidgetConfig);
 
                 paramProperty.put("ui", paramUIProperty);
+                paramProperty.put("rules", requiredRule);
                 properties.put(paramPO.getNameEN(), paramProperty);
             });
         return schema;

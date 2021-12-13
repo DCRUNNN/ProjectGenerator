@@ -8,9 +8,10 @@
               <el-button type="primary" size="small" icon="el-icon-refresh"
                          @click.native.prevent="">刷新
               </el-button>
-              <el-button type="primary" size="small" icon="el-icon-plus"
-                         @click.native.prevent="">新增
-              </el-button>
+              <router-link :to="'/template/create'">
+                <el-button type="primary" size="small" icon="el-icon-plus">新增
+                </el-button>
+              </router-link>
             </el-col>
             <el-col :span="8" :offset="10">
               <el-input
