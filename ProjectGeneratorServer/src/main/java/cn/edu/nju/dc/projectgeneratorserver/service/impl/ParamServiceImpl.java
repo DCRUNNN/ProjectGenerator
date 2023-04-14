@@ -27,7 +27,8 @@ public class ParamServiceImpl implements ParamService {
     public int insertPublicParam(ParamPO paramPO) {
         paramPO.setCreateTime(DateUtil.getCurrentFormatTime());
         paramPO.setUpdateTime(DateUtil.getCurrentFormatTime());
-        return paramDao.insertParam(paramPO);
+        paramDao.insertParam(paramPO);
+        return paramPO.getId();
     }
 
     @Override
