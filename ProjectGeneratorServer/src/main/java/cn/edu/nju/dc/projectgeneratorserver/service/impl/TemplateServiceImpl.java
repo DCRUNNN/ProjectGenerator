@@ -147,8 +147,13 @@ public class TemplateServiceImpl implements TemplateService {
                 .stream()
                 .peek(paramPO -> paramPO.setCreateTime(DateUtil.getCurrentFormatTime()))
                 .peek(paramPO -> paramPO.setUpdateTime(DateUtil.getCurrentFormatTime()))
-                .map(paramPO -> paramDao.insertParam(paramPO))
+                .map(paramPO -> insertParamAndReturnID(paramPO))
                 .map(privateParamID -> new TemplateParamRelationPO(templateID, privateParamID))
                 .forEach(relationPO -> paramDao.insertTemplateParamRelation(relationPO));
+    }
+
+    private int insertParamAndReturnID(ParamPO paramPO) {
+        paramDao.insertParam(paramPO);
+        return paramPO.getId(); // 返回主键 ID
     }
 }
