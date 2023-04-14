@@ -58,7 +58,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         String contentStr = templatePO.getContent();
         boolean isArray = StringUtils.startsWith(contentStr, "[") && StringUtils.endsWith(contentStr, "]");
         if (!isArray) {
-            throw new ServiceException("template content is not array type, object type is  not support yet");
+            throw new ServiceException("template content is not array type, object type is not support yet");
         }
         List<TemplateContent> contentList = JSONObject.parseArray(contentStr, TemplateContent.class);
 
@@ -124,10 +124,11 @@ public class GeneratorServiceImpl implements GeneratorService {
         throws IOException {
         // TODO 文件名称格式化，避免 ../ 等
         for (TemplateContent content : contentList) {
+            // 文件名支持渲染
+            String renderContentName = FreemarkerUtil.getInstance().renderInMemory(content.getName(), attrMap);
             // 处理文件夹
             if (content.isDirectory()) {
-                // TODO 文件名支持渲染
-                Path newDir = currentPath.resolve(content.getName());
+                Path newDir = currentPath.resolve(renderContentName);
                 // 不存在则创建文件夹
                 if (Files.notExists(newDir)) {
                     Files.createDirectory(newDir);
@@ -139,7 +140,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             }
             // 处理文件
             if (content.isTextFile()) {
-                Path textFile = currentPath.resolve(content.getName());
+                Path textFile = currentPath.resolve(renderContentName);
                 // 不存在则创建文件
                 if (Files.notExists(textFile)) {
                     Files.createFile(textFile);

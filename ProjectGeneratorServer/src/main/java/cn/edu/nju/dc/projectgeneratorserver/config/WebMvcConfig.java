@@ -48,6 +48,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
             //SerializerFeature.WriteMapNullValue,
             // String null -> ""
             SerializerFeature.WriteNullStringAsEmpty,
+            // 关闭重复引用检测
+            SerializerFeature.DisableCircularReferenceDetect,
             // Number null -> 0
             SerializerFeature.WriteNullNumberAsZero);
         converter.setFastJsonConfig(config);

@@ -52,4 +52,9 @@ public class TemplateController {
         return BaseResultUtil.createOkResult(templateService.listAll(page, size));
     }
 
+    @PreAuthorize("hasAuthority('template:delete')")
+    @RequestMapping(path = "/deleteByTemplateID", method = RequestMethod.GET)
+    public BaseResult deleteByTemplateID(@RequestParam int templateID) {
+        return BaseResultUtil.createOkResult(templateService.deleteByTemplateID(templateID));
+    }
 }

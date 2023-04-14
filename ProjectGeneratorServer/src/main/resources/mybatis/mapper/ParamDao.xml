@@ -48,7 +48,7 @@
     )
   </insert>
 
-  <update id="updateParam" parameterType="ParamPO">
+  <update id="updateParamByIDAndType" parameterType="ParamPO">
     UPDATE t_param
     SET
     <if test="param.nameCN != null">name_cn = #{param.nameCN},</if>
@@ -57,7 +57,7 @@
     <if test="param.fieldType != null">field_type = #{param.fieldType},</if>
     update_time = #{param.updateTime}
     WHERE
-    id = #{param.id}
+    id = #{param.id} AND `type` = #{param.type}
   </update>
 
   <insert id="insertTemplateParamRelation" parameterType="TemplateParamRelationPO">
@@ -68,7 +68,7 @@
     )
   </insert>
 
-  <delete id="deleteByTemplateID">
+  <delete id="deleteRelationByTemplateID">
     DELETE FROM t_template_param where template_id = #{templateID}
   </delete>
 
@@ -76,6 +76,13 @@
     DELETE
     FROM t_param
     Where id = #{paramID}
+  </delete>
+
+  <delete id="deletePrivateParamByTemplateID">
+    DELETE t_param FROM t_param, t_template_param
+    WHERE t_param.id = t_template_param.param_id
+    AND t_template_param.template_id = #{templateID}
+    AND t_param.type = 2
   </delete>
 
   <select id="isParamInUse" resultType="Boolean">
@@ -97,6 +104,14 @@
     <include refid="param_all_columns"/>
     FROM t_param
     WHERE `type` = 1
+  </select>
+
+  <select id="listAllPrivateParam" resultMap="PublicParamMap">
+    SELECT
+    <include refid="param_all_columns"/>
+    FROM t_param
+    WHERE `type` = 2
+
   </select>
 
 </mapper>

@@ -5,6 +5,7 @@ import cn.edu.nju.dc.projectgeneratorserver.service.LogService;
 import cn.edu.nju.dc.projectgeneratorserver.support.exception.DBException;
 import cn.edu.nju.dc.projectgeneratorserver.support.exception.ServiceException;
 import cn.edu.nju.dc.projectgeneratorserver.support.log.domain.LogEntity;
+import cn.edu.nju.dc.projectgeneratorserver.utils.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class LogServiceImpl implements LogService {
     @Override
     @Async("logTaskExecutor")
     public Integer insertLog(LogEntity log) throws DBException {
-        long beginTime = System.currentTimeMillis();
+        log.setCreateTime(DateUtil.getCurrentFormatTime());
         try {
             logDao.insertLog(log);
             return log.getId();

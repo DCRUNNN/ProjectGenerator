@@ -22,7 +22,7 @@ public class JasyptStringEncryptor
     public void encode()
     {
         final String name = stringEncryptor.encrypt("root");
-        final String password = stringEncryptor.encrypt("mysql");
+        final String password = stringEncryptor.encrypt("macmysql2023");
 
         System.err.println("name = " + name);
         System.err.println("password = " + password);

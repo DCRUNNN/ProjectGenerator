@@ -98,7 +98,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: '参数管理',
         component: () => import('@/views/param/index'),
-        meta: { permission: ['params:list'] }
+        meta: { permission: ['param:list'] }
       },
     ]
   },

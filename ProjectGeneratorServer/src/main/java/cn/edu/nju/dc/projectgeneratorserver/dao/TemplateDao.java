@@ -26,5 +26,7 @@ public interface TemplateDao {
 
     TemplatePO getByID(@Param("templateID") int templateID);
 
+    int deleteByTemplateID(@Param("templateID") int templateID);
+
     List<TemplatePO> listAll();
 }

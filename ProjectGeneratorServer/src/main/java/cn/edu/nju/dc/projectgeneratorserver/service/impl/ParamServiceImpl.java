@@ -34,7 +34,7 @@ public class ParamServiceImpl implements ParamService {
     public int updatePublicParam(ParamPO paramPO) {
         // TODO 发送消息，更新模板中的引用
         paramPO.setUpdateTime(DateUtil.getCurrentFormatTime());
-        return paramDao.updateParam(paramPO);
+        return paramDao.updateParamByIDAndType(paramPO);
     }
 
     @Override

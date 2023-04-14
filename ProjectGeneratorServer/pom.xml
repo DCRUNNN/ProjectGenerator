@@ -20,7 +20,7 @@
     <lombok.version>1.18.4</lombok.version>
     <fastjson.version>1.2.47</fastjson.version>
     <mybatis.version>1.3.2</mybatis.version>
-    <json.webtoken.verison>0.9.1</json.webtoken.verison>
+    <json.webtoken.verison>0.11.5</json.webtoken.verison>
     <jasypt.version>2.0.0</jasypt.version>
     <swagger2.version>2.9.2</swagger2.version>
     <swagger-ui.version>2.9.2</swagger-ui.version>
@@ -122,12 +122,27 @@
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <scope>runtime</scope>
+      <version>8.0.13</version>
     </dependency>
 
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
-      <artifactId>jjwt</artifactId>
+      <artifactId>jjwt-api</artifactId>
       <version>${json.webtoken.verison}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>${json.webtoken.verison}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-jackson</artifactId>
+      <version>${json.webtoken.verison}</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
@@ -158,6 +173,7 @@
       <artifactId>springfox-swagger-ui</artifactId>
       <version>${swagger-ui.version}</version>
     </dependency>
+
   </dependencies>
 
   <build>

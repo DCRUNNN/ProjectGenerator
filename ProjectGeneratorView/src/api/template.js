@@ -36,3 +36,13 @@ export function updateTemplate(templateDTO) {
     data: templateDTO
   })
 }
+
+export function deleteByTemplateID(templateID) {
+  return request({
+    url: '/template/deleteByTemplateID',
+    method: 'get',
+    params: {
+      templateID: templateID
+    }
+  })
+}

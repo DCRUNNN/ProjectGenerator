@@ -21,8 +21,8 @@ public class PasswordEncryptor
     @Test
     public void encode()
     {
-        final String admin = this.passwordEncoder.encode("admin123");
-        final String user = this.passwordEncoder.encode("editor123");
+        final String admin = this.passwordEncoder.encode("allencdeng");
+        final String user = this.passwordEncoder.encode("jiayouDCRUNNN6!");
         System.err.println("admin password = " + admin);
         System.err.println("editor password = " + user);
     }

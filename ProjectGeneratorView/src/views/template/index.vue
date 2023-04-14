@@ -64,7 +64,8 @@
                 <el-button type="primary" size="mini" icon="el-icon-document">修改</el-button>
               </router-link>
               <el-button type="warning" size="mini" icon="el-icon-delete"
-                         @click.native.prevent="deleteTemplate(scope.row.id)">删除
+                         :loading="deleteTemplateBtnLoading"
+                         @click.native.prevent="deleteTemplate(scope.row.id, scope.row.name)">删除
               </el-button>
             </el-button-group>
           </template>
@@ -91,57 +92,78 @@
 </style>
 
 <script>
-  import { listAllTemplate } from '@/api/template'
+import {listAllTemplate, deleteByTemplateID} from '@/api/template'
 
-  export default {
-    name: 'TemplateManage',
-    components: { },
-    data() {
-      return {
-        searchText: '',
-        templateList: [],
-        listLoading: false,
-        total: 0,
-        page: 1,
-        size: 10,
-      }
-    },
-    mounted() {
+export default {
+  name: 'TemplateManage',
+  components: {},
+  data() {
+    return {
+      searchText: '',
+      templateList: [],
+      listLoading: false,
+      deleteTemplateBtnLoading: false,
+      total: 0,
+      page: 1,
+      size: 10,
+    }
+  },
+  mounted() {
 
+  },
+  created() {
+    this.listAllTemplate();
+  },
+  methods: {
+    listAllTemplate() {
+      this.listLoading = true;
+      listAllTemplate(this.page, this.size).then(response => {
+        if (response.returnCode === 200) {
+          this.templateList = response.data.list;
+          this.total = response.data.total;
+          this.listLoading = false;
+        } else {
+          this.$message.error(response.message);
+          console.error(response);
+        }
+      }).catch(error => {
+        this.$message.error(error.message);
+        console.error(error);
+      })
     },
-    created() {
-      this.listAllTemplate();
-    },
-    methods: {
-      listAllTemplate(){
-        this.listLoading = true;
-        listAllTemplate(this.page, this.size).then(response =>{
+    deleteTemplate(templateID, templateName) {
+      this.$confirm('您确认要删除 ' + templateName + ' 模板吗？', 'Warning', {
+        confirmButtonText: '删除',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteTemplateBtnLoading = true
+        deleteByTemplateID(templateID).then(response => {
           if (response.returnCode === 200) {
-            this.templateList = response.data.list;
-            this.total = response.data.total;
-            this.listLoading = false;
-          }else{
-            this.$message.error(response.message);
-            console.error(response);
+            this.$message.success('删除模板成功！')
+            this.deleteTemplateBtnLoading = false
+            this.listAllTemplate();
+          } else {
+            this.$message.error(response.message)
+            this.deleteTemplateBtnLoading = false
+            console.log(response)
           }
         }).catch(error => {
           this.$message.error(error.message);
           console.error(error);
+          this.deleteTemplateBtnLoading = false
         })
-      },
-      deleteTemplate(templateID) {
-        console.log(templateID)
-        this.$message.warning("马上支持")
-      },
-      handleSizeChange(size) {
-        this.size = size;
-        this.page = 1;
-        this.listAllTemplate()
-      },
-      handleCurrentChange(page) {
-        this.page = page;
-        this.listAllTemplate()
-      },
-    }
+      });
+    },
+    handleSizeChange(size) {
+      this.size = size;
+      this.page = 1;
+      this.listAllTemplate()
+    },
+    handleCurrentChange(page) {
+      this.page = page;
+      this.listAllTemplate()
+    },
   }
+}
 </script>

@@ -5,12 +5,15 @@
         <el-form>
           <el-form-item>
             <el-row :gutter="15" type="flex">
-              <el-col :span="6">
+              <el-col :span="10">
                 <el-button type="primary" size="small" icon="el-icon-check"
                            @click.native.prevent="saveTemplateDialogVisible=true">保存
                 </el-button>
                 <el-button type="primary" size="small" icon="el-icon-plus"
                            @click.native.prevent="createFirstLevelFileDialogVisible=true">新建文件&nbsp;/&nbsp;文件夹
+                </el-button>
+                <el-button type="primary" size="small" icon="el-icon-plus"
+                           @click.native.prevent="createPrivateParamDialogVisible=true">新建模板私参
                 </el-button>
               </el-col>
             </el-row>
@@ -32,7 +35,7 @@
                                  @node-click="handleNodeClick"
                                  default-expand-all
                                  draggable
-                        :expand-on-click-node="false">
+                                 :expand-on-click-node="false">
                         <span class="custom-tree-node" slot-scope="{ node, data }">
                           <span>
                             <i :class="data.fileType===1 ? 'el-icon-folder' : 'el-icon-document'"
@@ -78,34 +81,47 @@
                               stripe border fit highlight-current-row>
                       <el-table-column type="selection" width="55">
                       </el-table-column>
-                      <el-table-column label="参数中文名称" align="center" prop="name" min-width="60%">
+                      <el-table-column label="参数中文名称" align="center" prop="nameCN" min-width="60%">
                         <template slot-scope="scope">
                           <i class="el-icon-connection"></i>
                           <span v-text="scope.row.nameCN"></span>
                         </template>
                       </el-table-column>
-                      <el-table-column label="参数英文名称" align="center" prop="name" min-width="60%">
+                      <el-table-column label="参数英文名称" align="center" prop="nameEN" min-width="60%">
                         <template slot-scope="scope">
                           <i class="el-icon-connection"></i>
                           <span v-text="scope.row.nameEN"></span>
                         </template>
                       </el-table-column>
-                      <el-table-column label="参数简介" align="center" prop="description" min-width="50%">
-                        <template slot-scope="scope">
-                          <i class="el-icon-info"></i>
-                          <span v-text="scope.row.description"></span>
-                        </template>
-                      </el-table-column>
-                      <el-table-column label="参数类型" align="center" prop="name" min-width="60%">
+                      <el-table-column label="参数类型" align="center" prop="type" min-width="60%">
                         <template slot-scope="scope">
                           <i :class="scope.row.type===1? 'el-icon-star-on': 'el-icon-star-off'"></i>
                           <span v-text="scope.row.type===1?'模板公参':'模板私参'"></span>
                         </template>
                       </el-table-column>
-                      <el-table-column label="字段类型" align="center" prop="name" min-width="60%">
+                      <el-table-column label="字段类型" align="center" prop="fieldType" min-width="60%">
                         <template slot-scope="scope">
                           <i class=el-icon-magic-stick></i>
                           <span v-text="scope.row.fieldType"></span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="操作" align="center" prop="op" min-width="60%">
+                        <template slot-scope="scope">
+                         <el-popover
+                            ref="paramDescriptionPopover"
+                            placement="top-start"
+                            width="100"
+                            trigger="click"
+                            :content="scope.row.description">
+                           <el-button type="text" size="small" slot="reference">
+                             查看简介
+                           </el-button>
+                         </el-popover>
+                          <el-button
+                            :disabled="scope.row.type === 1"
+                            @click="removeFromParamListInMemory(scope.$index, scope.row)" type="text" size="small">
+                            删除
+                          </el-button>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -186,6 +202,34 @@
           <el-form-item>
             <el-button @click="resetForm('createFileForm'); createFileDialogVisible = false">取消</el-button>
             <el-button type="primary" @click="createFile('createFileForm')">确定</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+
+      <el-dialog :title="新建模板私有参数" :visible.sync="createPrivateParamDialogVisible" width="30%">
+        <el-form :model="createPrivateParamForm" :rules="createPrivateParamFormRules" ref="createPrivateParamForm"
+                 label-position="right"
+                 label-width="120px">
+          <el-form-item label="参数中文名称" prop="nameCN">
+            <el-input v-model="createPrivateParamForm.nameCN"></el-input>
+          </el-form-item>
+          <el-form-item label="参数英文名称" prop="nameEN">
+            <el-input v-model="createPrivateParamForm.nameEN"></el-input>
+          </el-form-item>
+          <el-form-item label="参数简介" prop="description">
+            <el-input v-model="createPrivateParamForm.description"></el-input>
+          </el-form-item>
+          <el-form-item label="参数字段类型" prop="fieldType">
+            <el-select v-model="createPrivateParamForm.fieldType" placeholder="请选择新建的私有参数字段类型">
+              <el-option label="字符串" value="string"></el-option>
+              <el-option label="数据类型" value="number"></el-option>
+              <el-option label="数组" value="array"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="resetForm('createPrivateParamForm'); createPrivateParamDialogVisible = false">取消
+            </el-button>
+            <el-button type="primary" @click="pushToParamListInMemory('createPrivateParamForm')">确定</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -277,9 +321,11 @@
         name: 'ProjectGeneratorServerMain.java',
         language: "java",
         fileType: 2,
-        content: "public static void main(String[] args) {\n"
-          + "    System.out.Println(666);\n"
-          + "}",
+        content: `public class ProjectGeneratorMain {
+    public static void main(String[] args) {
+        System.out.println(666);
+    }
+}`,
       }]
     }]
   }, {
@@ -350,6 +396,7 @@
         },
         createFileDialogVisible: false,
         createFirstLevelFileDialogVisible: false,
+        createPrivateParamDialogVisible: false,
         opts: {
           value: '',
           readOnly: false, // 是否可编辑
@@ -366,6 +413,18 @@
         },
         // 参数
         paramList: [],
+        createPrivateParamForm: {
+          nameEN: '',
+          nameCN: '',
+          description: '',
+          fieldType: '',
+        },
+        createPrivateParamFormRules: {
+          nameEN: [{required: true, trigger: 'blur', message: '参数英文名称不能为空'}],
+          nameCN: [{required: true, trigger: 'blur', message: '参数中文名称不能为空'}],
+          description: [{required: true, trigger: 'blur', message: '参数简介不能为空'}],
+          fieldType: [{required: true, trigger: 'blur', message: '请选择要新建的私有参数字段类型'}],
+        },
         listLoading: false,
         total: 0,
         page: 1,
@@ -563,6 +622,7 @@
             updateTime: resultTemplateDTO.createTime,
           }
           this.$nextTick(function () {
+            this.templateDTO.paramList.filter(p => p.type === 2).forEach(p => this.paramList.push(p))
             this.setSelectParams()
           });
         }).catch(err => {
@@ -576,9 +636,20 @@
             this.saveTemplateBtnLoading = false;
             return
           }
+          const requestTemplateDTO = {
+            id: this.templateDTO.id,
+            name: this.templateDTO.name,
+            description: this.templateDTO.description,
+            author: this.templateDTO.author,
+            contentID: this.templateDTO.contentID,
+            content: JSON.stringify(this.templateDTO.content),
+            paramList: this.templateDTO.paramList,
+            createTime: this.templateDTO.createTime,
+            updateTime: this.templateDTO.updateTime,
+          }
           if (!this.isEdit) {
             // TODO set template author
-            insertTemplate(this.templateDTO).then(response => {
+            insertTemplate(requestTemplateDTO).then(response => {
               if (response.returnCode === 200) {
                 this.$message.success('保存模板成功');
                 this.saveTemplateDialogVisible = false;
@@ -593,7 +664,7 @@
               this.saveTemplateBtnLoading = false;
             })
           } else {
-            updateTemplate(this.templateDTO).then(response => {
+            updateTemplate(requestTemplateDTO).then(response => {
               if (response.returnCode === 200) {
                 this.$message.success('更新模板成功');
                 this.saveTemplateDialogVisible = false;
@@ -636,17 +707,41 @@
           }
         });
       },
+      pushToParamListInMemory(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (!valid) {
+            this.$message({
+              type: 'warning',
+              message: '请检查输入'
+            });
+            return false
+          }
+          const newPrivateParam = {
+            nameEN: this.createPrivateParamForm.nameEN,
+            nameCN: this.createPrivateParamForm.nameCN,
+            description: this.createPrivateParamForm.description,
+            fieldType: this.createPrivateParamForm.fieldType,
+            type: 2,
+          }
+          this.paramList.push(newPrivateParam)
+          this.total += 1
+          this.$refs[formName].resetFields()
+          this.createPrivateParamDialogVisible = false
+        })
+      },
+      removeFromParamListInMemory(index, param) {
+        this.paramList.splice(index, 1)
+        this.total -= 1
+      },
       handleParamSelectionChange(val) {
         this.templateDTO.paramList = val;
       },
       handleSizeChange(size) {
         this.size = size;
         this.page = 1;
-        this.listLogsByType()
       },
       handleCurrentChange(page) {
         this.page = page;
-        this.listLogsByType()
       },
     }
   }

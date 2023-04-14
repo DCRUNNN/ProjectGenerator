@@ -6,9 +6,9 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/project_generator?useSSL=false&useUnicode=true&characterEncoding=UTF-8
-    username: ENC(7rTtVAZ5vgfPORElJsqvdA==)
-    password: ENC(XQ/dCyo8Fq5h8PbL/tsdEA==)
-    driver-class-name: com.mysql.jdbc.Driver
+    username: ENC(Ih3JxNYTxDRX0q8GuVPC4A==)
+    password: ENC(oRxH0gJgsz8g5+LymmJ2fC04CIjUlIKu)
+    driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
       max-file-size: -1

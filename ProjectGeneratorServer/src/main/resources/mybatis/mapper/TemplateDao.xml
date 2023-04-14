@@ -77,11 +77,11 @@
     t.*, c.content, param.id AS param_id, param.name_cn AS param_name_cn, param.name_en AS param_name_en,
     param.description AS param_description, param.type AS param_type, param.field_type AS param_field_type,
     param.create_time AS param_create_time, param.update_time AS param_update_time
-    FROM t_template t, t_template_content c, t_param param, t_template_param relation
+    FROM t_template t
+    LEFT JOIN t_template_param relation ON relation.template_id = t.id
+    LEFT JOIN t_template_content c ON t.content_id = c.content_id
+    LEFT JOIN t_param param ON param.id = relation.param_id
     WHERE t.id = #{templateID}
-    AND t.content_id = c.content_id
-    AND relation.template_id = t.id
-    AND param.id = relation.param_id
   </select>
 
   <select id="listAll" resultMap="TemplateWithoutParamMap">
@@ -90,5 +90,9 @@
     FROM t_template t, t_template_content c
     WHERE t.content_id = c.content_id
   </select>
+
+  <delete id="deleteByTemplateID">
+    DELETE FROM t_template WHERE id = #{templateID}
+  </delete>
 
 </mapper>

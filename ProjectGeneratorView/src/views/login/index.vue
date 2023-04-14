@@ -96,6 +96,10 @@ export default {
               this.btnLoading = false
               this.$message.error(response.message)
             }
+          }).catch(error => {
+            console.error(error);
+            this.btnLoading = false
+            this.$message.error(error.message);
           });
         }
       })
